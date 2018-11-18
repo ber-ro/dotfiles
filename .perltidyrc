@@ -1,0 +1,17 @@
+--indent-columns=2
+
+--freeze-newlines
+#--freeze-whitespace
+#--indent-only
+#--nodelete-old-newlines
+--noadd-newlines
+--freeze-blank-lines
+#--noblanks-before-comments
+#--minimum-space-to-comment=0
+#--fixed-position-side-comment=0
+--nohanging-side-comments
+--stack-opening-tokens
+--stack-closing-tokens
+--starting-indentation-level=0
+--cuddled-else
+-pt=2

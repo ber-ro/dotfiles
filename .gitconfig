@@ -1,0 +1,7 @@
+[user]
+	name = Bernhard Rotter
+	email = bernhard.rotter@gmail.com
+[core]
+	filemode = false
+[diff]
+	tool = ediff
