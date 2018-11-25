@@ -19,6 +19,6 @@ fi
 #   PATH="${HOME}/bin:${PATH}"
 # fi
 if [[ ${TERM} != 'screen' ]]; then
-  /usr/local/bin/emacs26.exe & #emacs-w32.exe &
+  /home/rotterb/dev/emacs-26/src/emacs-26.1.1.exe &
 fi
 [[ ${TERM} != 'screen' ]] && exec tmux

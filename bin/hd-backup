@@ -1,0 +1,216 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Carp;
+use Data::Dumper;
+use File::Basename;
+use Getopt::Long qw(:config bundling);
+use IO::File;
+use YAML::XS qw(LoadFile);
+$| = 1;
+
+sub println { print "@_\n"; }
+sub psystem {
+  println @_;
+  system @_;
+}
+
+my $bAllParam;
+my $bDryrunParam;
+my $sPatternParam;
+my $sOptionalParam;
+die if !GetOptions
+  "a"   => \$bAllParam,
+  "d"   => \$bDryrunParam,
+  "o=s" => \$sOptionalParam,
+  "p=s" => \$sPatternParam,
+  ;
+#export PATH=/usr/local/bin:/usr/bin:/bin
+if (!$ENV{COMPUTERNAME}) {
+  mount_cifs(qw/c d h/);
+}
+#die Dumper(\@ARGV);
+
+my $cfg = cfg();
+
+my $log = new IO::File "> $ENV{HOME}/" . basename($0) . ".log";
+die "Could not write log!\n" if !$log;
+
+my $options =
+  "--delete --prune-empty-dirs"
+  . " --recursive --filter='dir-merge /.rsync-filter' --ignore-errors"
+  . " --times --modify-window=2 --one-file-system"
+  . " --itemize-changes --info= --debug=filter";
+my $cmd = "rsync $options";
+$cmd .= " --dry-run" if ($bDryrunParam);
+print $log "$cmd\n";
+
+for my $s (sources()) {
+  for my $d (expand($s->{dirs})) {
+    my $src = src($d);
+    my $dst = dst($d);
+    next if (!$src || $sPatternParam && $dst !~ /$sPatternParam/i);
+    #  $cmd .= " \"$src\" \"$dst\"";
+    my $src_dst = "\n$src -> $dst\n";
+    my $filters = $src =~ /\/"?$/ ? filters($s->{label}) : "";
+    print $src_dst;
+    print $log $src_dst;
+    my $fh = new IO::File "$cmd$filters $src \"$dst\" 2>&1 |";
+    while (my $l = <$fh>) {
+      next if ignored($l,$s->{label});
+      print $log $l;
+      print $l;
+    }
+  }
+}
+
+#println filters();
+exit;
+######################################################################
+
+sub sources {
+  my @sources = $bAllParam || !$sOptionalParam ?
+    ({ "label" => "source", "dirs" => $cfg->{source} }) : ();
+  $DB::single = 1;
+  my @optional = $sOptionalParam ? split(/,/, $sOptionalParam) : ("");
+  my %optional;
+  for my $o (@optional) {
+    $optional{$o} = 1;
+  }
+  for my $o (keys %{ $cfg->{optional} }) {
+    $optional{$o} = 1 if $optional{"*"} || $bAllParam;
+  }
+  for my $o (sort keys %{ $cfg->{optional} }) {
+    push @sources, { "label" => $o, "dirs" => $cfg->{optional}->{$o} }
+      if ($optional{$o} || $optional{"*"}) && $cfg->{optional}->{$o};
+  }
+  #die Dumper(\@sources);
+  return @sources;
+}
+
+sub expand {
+  $DB::single = 1;
+  my ($sources) = @_;
+  my @sources = @$sources;
+  for (my $i = 0 ; $i <= $#sources ; $i++) {
+    if (ref $sources[$i] eq "HASH") {
+      my $elem    = $sources[$i];
+      my $dir     = (keys(%$elem))[0];
+      my @subdirs = @{ $elem->{$dir} };
+      for my $s (@subdirs) {
+        if (ref $s eq "ARRAY") {
+          $s->[0] = "$dir/" . $s->[0];
+        } else {
+          $s = "$dir/$s";
+        }
+      }
+      splice @sources, $i, 1, @subdirs;
+      $i += scalar(@subdirs) - 1;
+    }
+  }
+  return @sources;
+}
+
+sub src {
+  my ($path) = @_;
+  $path = $path->[0] if ref($path);
+  my @glob = glob "'$path'";
+  return undef if ($#glob==-1);
+  return "\"" . join("\" \"", @glob) . "\"";
+  if ($ENV{COMPUTERNAME}) {
+    return $path if ($^O =~ /cygwin/);
+    $path =~ /([^\/]+)$/;
+    return "ubuntu::$1";
+  }
+  $path =~ s/cygdrive/media/;
+  return $path;
+}
+
+sub dst {
+  my ($path) = @_;
+
+  my $destination = $cfg->{destination};
+  #psystem "/bin/mount $mountpoint" while (! mounted($mountpoint));
+  #$destination =~ s/cygdrive/media/ if ! -d($destination);
+  die "'$destination' does not exist!\n" if (!-d $destination);
+
+  $path = $path->[1] if ref($path);
+  $path =~ /([^\/:]+)\/?$/;
+  return "$destination/$1";
+}
+
+{
+  my $filters;
+  sub filters {
+    my ($label) = @_;
+    return $filters if ($filters);
+
+    my $filters;
+    for my $i (splitSection("exclude"), splitSection("ignore"), splitSection("ignore-$label")) {
+      #      print $log "$i\n";
+      #      $i =~ s/\s*#.*//;
+      next if !$i;
+      my @list = split />/, $i;
+      if ($#list > 0) {
+        for my $j (@list[ 1 .. $#list ]) {
+          $filters .= " -f H_\"$list[0]/$j\"";
+        }
+      } else {
+        $filters .= " -f H_\"$i\"";
+      }
+    }
+    return $filters;
+  }
+}
+
+sub mounted {
+  my ($dir) = @_;
+  sleep 1;
+  return `/bin/mount` =~ / on $dir type /;
+}
+
+sub mount_cifs {
+  for my $d (@_) {
+    #    println $d;
+    next if mounted("/media/$d");
+    #    println $d;
+    !$ENV{PASSWD} and print "password: " and $ENV{PASSWD} = <STDIN>;
+    chomp $ENV{PASSWD};
+    psystem "/bin/mount -tcifs -o user=bernhard //windows-8/$d /media/$d";
+  }
+}
+
+{
+  my $regex;
+  sub ignored {
+    my ($line,$label) = @_;
+    if (!$regex) {
+      $regex = join "|", splitSection("ignore"), splitSection("ignore-$label");
+      $regex =~ s/\*/\\*/g;
+      $regex = qr/because of pattern ($regex)/
+    }
+    return
+      $line =~ /skipping non-regular file|NTUSER.DAT/i
+      || $line =~ /^\./
+      || $line =~ $regex;
+  }
+}
+
+sub splitSection {
+  my ($section) = @_;
+  return () if (!defined $cfg->{$section});
+  
+  $cfg->{$section} =~ s/\#.*//g;
+  my @result = split /\||\s*\n\s*/, $cfg->{$section};
+  return @result;
+  #print $log "$cfg->{exclude}\n";
+}
+
+sub cfg {
+  my $cfg = LoadFile(dirname($0) . "/." . basename($0));
+  #print Dumper(\$cfg);
+  # exit;
+  return $cfg;
+}

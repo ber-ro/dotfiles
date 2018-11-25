@@ -1,7 +1,26 @@
+# This is Git's per-user configuration file.
 [user]
-	name = Bernhard Rotter
-	email = bernhard.rotter@gmail.com
+# Please adapt and uncomment the following lines:
+name = GROUPINFRA\\rotterb
+email = bernhard.rotterb@cgi.com
 [core]
 	filemode = false
+[alias]
+	co = checkout
+	ci = commit
+	br = branch
+	st = status 
+
 [diff]
 	tool = ediff
+# [difftool "ediff"]
+# cmd = emacsclient --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+
+[merge]
+  conflictstyle = diff3
+  tool = ediff
+[mergetool "ediff"]
+ cmd = emacsclient -c -a \"\"  --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\")\"
+ #cmd = emacsclient --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" \\\"$MERGED\\\")\"
+ trustExitCode = true
+       

@@ -127,6 +127,7 @@
  '(cperl-hairy nil)
  '(cperl-indent-parens-as-block t)
  '(create-lockfiles nil)
+ '(css-indent-offset 2)
  '(dabbrev-case-replace nil)
  '(default-frame-alist (quote ((width . 100) (top . 10))))
  '(delete-old-versions (quote other))
@@ -147,6 +148,7 @@
  '(dired-recursive-copies t)
  '(dired-recursive-deletes (quote top))
  '(display-time-24hr-format t)
+ '(ediff-diff-options "")
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(electric-indent-mode t)
  '(electric-layout-mode nil)
@@ -181,10 +183,7 @@
  '(global-mark-ring-max 1024)
  '(gnus-summary-line-format "%U%R%d%(%[%4L: %-20,20n%]%) %s")
  '(gud-chdir-before-run nil)
- '(hi-lock-auto-select-face t)
- '(highlight-beyond-fill-column-in-modes
-   (quote
-    ("emacs-lisp-mode" "c-mode" "c++-mode" "perl-mode" "bat-generic-mode" "visual-basic-mode")))
+ '(hi-lock-auto-select-face nil)
  '(history-delete-duplicates t)
  '(history-length t)
  '(hl-highlight-mode t)
@@ -211,6 +210,7 @@
  '(js2-bounce-indent-p t)
  '(js2-highlight-level 3)
  '(js2-strict-inconsistent-return-warning nil)
+ '(js2-strict-missing-semi-warning nil)
  '(kill-do-not-save-duplicates t)
  '(kill-ring-max 1024)
  '(kill-whole-line t)
@@ -229,14 +229,17 @@
  '(moccur-use-ee t)
  '(mouse-wheel-mode t nil (mwheel))
  '(org-agenda-files "~/org/.agenda_files")
- '(org-clock-idle-time 10)
+ '(org-agenda-use-time-grid nil)
+ '(org-clock-idle-time 15)
+ '(org-clock-persist t)
  '(org-export-headline-levels 0)
+ '(org-html-doctype "html5")
  '(org-startup-truncated nil)
  '(outline-auto-activation "ask")
  '(outline-minor-mode t t)
  '(package-selected-packages
    (quote
-    (eglot pdf-tools lsp-java auto-complete magit highlight-thing refine ac-js2 csharp-mode electric-spacing hl-anything js2-mode powershell web-mode yaml-mode yasnippet ztree)))
+    (web-mode ac-js2 auto-complete csharp-mode electric-spacing highlight-thing hl-anything js2-mode pug-mode refine yaml-mode ztree)))
  '(parens-require-spaces nil)
  '(perl-continued-statement-offset 2)
  '(perl-indent-continued-arguments 2)
@@ -270,8 +273,9 @@
  '(scroll-bar-mode (quote right))
  '(search-ring-max 160)
  '(select-enable-clipboard t)
+ '(send-mail-function (quote mailclient-send-it))
  '(sentence-end-double-space nil)
- '(sgml-basic-offset 3)
+ '(sgml-basic-offset 4)
  '(sh-basic-offset 2)
  '(sh-indentation 2)
  '(show-paren-mode t nil (paren))
@@ -313,10 +317,14 @@
  '(w3m-local-find-file-function nil)
  '(w3m-local-find-file-regexps (quote (nil)))
  '(warning-suppress-types (quote ((undo discard-info))))
+ '(web-mode-css-indent-offset 2)
  '(web-mode-enable-auto-indentation nil)
+ '(web-mode-part-padding 0)
+ '(web-mode-script-padding 4)
  '(whitespace-style
    (quote
     (face trailing tabs spaces lines-tail newline empty indentation space-after-tab space-before-tab space-mark tab-mark newline-mark)))
+ '(windmove-wrap-around t)
  '(woman-use-own-frame nil))
 
 ;; NT-emacs assumes a Windows command shell, which you change
@@ -368,7 +376,7 @@
           web-mode-css-indent-offset off
           web-mode-markup-indent-offset off
           web-mode-style-padding off
-          web-mode-script-padding 0))
+          web-mode-script-padding 4))
   (defun my-web-mode-hook ()
     (my-web-mode-indent 2)
     (add-to-list 'web-mode-comment-formats '("javascript" . "//"))
@@ -648,8 +656,8 @@
 (setq-default ztree-diff-filter-list nil)
 (setq hexl-options "-hex -iso")
 (add-hook 'makefile-mode-hook '(lambda () (modify-syntax-entry ?_ "w")))
+(windmove-default-keybindings)
 
-(fset 'yes-or-no-p 'y-or-n-p)
 ;;(dynamic-completion-mode)
 
 (setq backup-ignore
@@ -735,11 +743,10 @@
 ;; (standard-display-european 1)
 
 ;;(pc-bindings-mode)
-;;(require 'highlight-beyond-fill-column nil t)
 ;;(mouse-avoidance-mode 'exile)
 ;;(autoload 'xsl-mode "xslide" "Major mode for XSL stylesheets." t)
 ;;(autoload 'javascript-mode "javascript" nil t)
-;; (autoload 'visual-basic-mode "visual-basic-mode" "Visual Basic mode." t)
+(autoload 'visual-basic-mode "visual-basic-mode" "Visual Basic mode." t)
 ;; (autoload 'xslt-process-mode "xslt-process" "Emacs XSLT processing" t)
 ;; (autoload 'autoit-mode "autoit-mode")
 ;; (autoload 'powershell-mode "powershell-mode" nil t)
@@ -858,6 +865,8 @@
 (defun ediff-list () (interactive)
        (call-ediff 'ediff nil))
 
+(org-clock-persistence-insinuate)
+(remove-hook 'org-cycle-hook 'org-cycle-hide-drawers)
 (eval-after-load 'org
   '(progn
      (setq org-level-faces
@@ -933,14 +942,17 @@
     (shell-command cmd)))
 
 (defun my-jsbeautify (buf)
-  (interactive "bBuffer: \n")
+  (interactive "i" ;;"bBuffer: \n"
+               )
+  (unless buf (setq buf (buffer-name)))
   (set-buffer buf)
-  (let ((dir default-directory)
+  (let* ((dir default-directory)
         (tmp (make-temp-file "js-beautify"))
         (out "jsbeautify")
         (coding-system-for-read 'dos)
-        (type (cond ((string-match "\.html$" buf) "html")
-                    ((string-match "\.js$" buf) "js")
+        (name (buffer-file-name))
+        (type (cond ((string-match "\.html$" name) "html")
+                    ((string-match "\.js$" name) "js")
                     (t (completing-read "Type: " '("js" "html"))))))
     (cd "~")
     (write-region (point-min) (point-max) tmp)
@@ -949,7 +961,7 @@
     (call-process-shell-command (concat "js-beautify.cmd --type " type) tmp out)
     (cd dir)
     (ebuffers out (buffer-name))
-    (delete-file out)))
+    (delete-file tmp)))
 
 (defun dired-sort-size ()
   (interactive)
@@ -985,9 +997,8 @@
 
 ;;(global-set-key "\C-x\C-c" 'expunge-and-exit)
 
-(global-set-key [S-down] '(lambda () (interactive) (scroll-up 1)))
-(global-set-key [S-up] '(lambda () (interactive) (scroll-down 1)))
-
+;; (global-set-key [S-down] '(lambda () (interactive) (scroll-up 1)))
+;; (global-set-key [S-up] '(lambda () (interactive) (scroll-down 1)))
 (global-set-key [M-up] 'dired-jump)
 (global-set-key [M-right] 'bs-cycle-previous)
 (global-set-key [M-left] 'bs-cycle-next)
@@ -1028,8 +1039,10 @@
   (interactive)
   (yank-pop -1))
 (global-set-key "\M-Y" 'yank-pop-backwards)
+(global-set-key "\C-ca" 'org-agenda)
 (global-set-key [f9] 'open-in-eclipse)
 
+(fset 'yes-or-no-p 'y-or-n-p)
 (when (timeclock-currently-in-p) (timeclock-out))
 (timeclock-in nil "dummy")
 (recentf-mode 1)
