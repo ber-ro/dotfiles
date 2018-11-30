@@ -1,7 +1,27 @@
-[user]
-	name = Bernhard Rotter
-	email = bernhard.rotter@gmail.com
+[alias]
+  ci = commit
+  br = branch
+	co = checkout
+	st = status
 [core]
-	filemode = false
+	fileMode = false
+[http]
+	proxy = http://127.0.0.1:3128
+[mergetool "emerge"]
+ cmd = emacsclient --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$OUTPUT\\\")\"
 [diff]
-	tool = ediff
+                tool = ediff
+[difftool "ediff"]
+cmd = emacsclient --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+
+[merge]
+  conflictstyle = diff3
+  tool = ediff
+[mergetool "ediff"]
+cmd = emacsclient -c -a \"\"  --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\")\"
+#cmd = emacsclient --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" \\\"$MERGED\\\")\"
+trustExitCode = true
+  
+[user]
+	name = Bernhard Rotter (ext.)
+	email = bernhard.rotter@partner.bmwgroup.com

@@ -1,0 +1,2 @@
+alias dgit git --git-dir ~/.dotfiles/.git --work-tree=$HOME $*
+alias ll ls -l

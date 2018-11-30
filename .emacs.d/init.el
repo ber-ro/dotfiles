@@ -71,7 +71,7 @@
  '(bs-default-configuration "all")
  '(bs-max-window-height 1000)
  '(c-backslash-max-column 79)
- '(c-basic-offset 3)
+ '(c-basic-offset 4)
  '(c-default-style "Bernhard")
  '(c-echo-syntactic-information-p t)
  '(calendar-time-display-form
@@ -117,6 +117,9 @@
  '(company-idle-delay 0)
  '(company-minimum-prefix-length 2)
  '(compilation-scroll-output t)
+ '(compilation-search-path
+   (quote
+    (nil "src/test/java/acceptancetests/pages" "src/test/java/acceptancetests/steps" "src/test/java/acceptancetests/base" "src/test/java/acceptancetests/runner")))
  '(completion-styles (quote (basic partial-completion emacs22 substring)))
  '(cperl-auto-newline nil)
  '(cperl-auto-newline-after-colon t)
@@ -127,6 +130,7 @@
  '(cperl-hairy nil)
  '(cperl-indent-parens-as-block t)
  '(create-lockfiles nil)
+ '(css-indent-offset 2)
  '(dabbrev-case-replace nil)
  '(default-frame-alist (quote ((width . 100) (top . 10))))
  '(delete-old-versions (quote other))
@@ -147,8 +151,9 @@
  '(dired-recursive-copies t)
  '(dired-recursive-deletes (quote top))
  '(display-time-24hr-format t)
+ '(ediff-default-filtering-regexp "")
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
- '(electric-indent-mode t)
+ '(electric-indent-mode nil)
  '(electric-layout-mode nil)
  '(electric-pair-mode t)
  '(electric-pair-pairs (quote ((34 . 34) (39 . 39))))
@@ -181,10 +186,7 @@
  '(global-mark-ring-max 1024)
  '(gnus-summary-line-format "%U%R%d%(%[%4L: %-20,20n%]%) %s")
  '(gud-chdir-before-run nil)
- '(hi-lock-auto-select-face t)
- '(highlight-beyond-fill-column-in-modes
-   (quote
-    ("emacs-lisp-mode" "c-mode" "c++-mode" "perl-mode" "bat-generic-mode" "visual-basic-mode")))
+ '(hi-lock-auto-select-face nil)
  '(history-delete-duplicates t)
  '(history-length t)
  '(hl-highlight-mode t)
@@ -211,6 +213,7 @@
  '(js2-bounce-indent-p t)
  '(js2-highlight-level 3)
  '(js2-strict-inconsistent-return-warning nil)
+ '(js2-strict-missing-semi-warning nil)
  '(kill-do-not-save-duplicates t)
  '(kill-ring-max 1024)
  '(kill-whole-line t)
@@ -227,16 +230,28 @@
  '(menu-bar-mode nil)
  '(message-log-max t)
  '(moccur-use-ee t)
+ '(mode-require-final-newline nil)
  '(mouse-wheel-mode t nil (mwheel))
  '(org-agenda-files "~/org/.agenda_files")
- '(org-clock-idle-time 10)
+ '(org-agenda-use-time-grid nil)
+ '(org-clock-idle-time 15)
+ '(org-clock-persist t)
  '(org-export-headline-levels 0)
+ '(org-html-doctype "html5")
  '(org-startup-truncated nil)
  '(outline-auto-activation "ask")
  '(outline-minor-mode t t)
+ '(package-load-list
+   (quote
+    (all
+     (lsp-java nil)
+     (lsp-mode nil)
+     (ztree nil)
+     (meghanada nil)
+     (magit nil))))
  '(package-selected-packages
    (quote
-    (eglot pdf-tools lsp-java auto-complete magit highlight-thing refine ac-js2 csharp-mode electric-spacing hl-anything js2-mode powershell web-mode yaml-mode yasnippet ztree)))
+    (mvn feature-mode ac-js2 auto-complete csharp-mode electric-spacing highlight-thing hl-anything js2-mode magit powershell pug-mode refine web-mode yaml-mode yasnippet ztree)))
  '(parens-require-spaces nil)
  '(perl-continued-statement-offset 2)
  '(perl-indent-continued-arguments 2)
@@ -263,6 +278,7 @@
  '(recentf-exclude (quote ("[/\\]te?mp[/\\]\\|\\.timelog$\\|\\.ido\\.last$")))
  '(recentf-max-saved-items 1000)
  '(regexp-search-ring-max 160)
+ '(require-final-newline nil)
  '(revert-without-query (quote ("")))
  '(rng-nxml-auto-validate-flag nil)
  '(savehist-additional-variables (quote (compile-command)))
@@ -270,6 +286,7 @@
  '(scroll-bar-mode (quote right))
  '(search-ring-max 160)
  '(select-enable-clipboard t)
+ '(send-mail-function (quote mailclient-send-it))
  '(sentence-end-double-space nil)
  '(sgml-basic-offset 3)
  '(sh-basic-offset 2)
@@ -277,6 +294,7 @@
  '(show-paren-mode t nil (paren))
  '(show-paren-style (quote mixed))
  '(show-trailing-whitespace t)
+ '(smerge-command-prefix "v")
  '(sort-fold-case t t)
  '(speedbar-frame-parameters
    (quote
@@ -313,10 +331,14 @@
  '(w3m-local-find-file-function nil)
  '(w3m-local-find-file-regexps (quote (nil)))
  '(warning-suppress-types (quote ((undo discard-info))))
+ '(web-mode-css-indent-offset 2)
  '(web-mode-enable-auto-indentation nil)
+ '(web-mode-part-padding 0)
+ '(web-mode-script-padding 4)
  '(whitespace-style
    (quote
     (face trailing tabs spaces lines-tail newline empty indentation space-after-tab space-before-tab space-mark tab-mark newline-mark)))
+ '(windmove-wrap-around t)
  '(woman-use-own-frame nil))
 
 ;; NT-emacs assumes a Windows command shell, which you change
@@ -329,6 +351,7 @@
 ;;
 ;; This removes unsightly ^M characters.
 (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
+(setenv "PAGER" "")
 
 (when (require 'package nil t)
   (add-to-list 'package-archives
@@ -368,7 +391,7 @@
           web-mode-css-indent-offset off
           web-mode-markup-indent-offset off
           web-mode-style-padding off
-          web-mode-script-padding 0))
+          web-mode-script-padding 4))
   (defun my-web-mode-hook ()
     (my-web-mode-indent 2)
     (add-to-list 'web-mode-comment-formats '("javascript" . "//"))
@@ -467,6 +490,7 @@
 
 (setq diff-switches "-c")
 ;;(setq ediff-combination-pattern '("" "" ""))
+(setq ediff-diff-ok-lines-regexp "\\(.?\\)")
 
 (put 'dired-do-delete 'disabled nil)
 (put 'downcase-region 'disabled nil)
@@ -569,6 +593,13 @@
   )
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
+;; (add-hook 'java-mode-hook
+;;           (lambda ()
+;;             (setq c-basic-offset 4)
+;;             (setq c-default-style "bsd")))
+;; (require 'lsp-java)
+;; (add-hook 'java-mode-hook #'lsp-java-enable)
+
 ;; (require 'align)
 ;; (setq
 ;;  align-rules-list
@@ -602,6 +633,17 @@
 : \\(?:\\(?:fatal \\)?error\\|warnin\\(g\\)\\) C[0-9]+:" 2 3 nil (4))
         ("^\\(?:[0-9]+>\\)?[ \t]*\\([^(\t\n]+\\)(\\([0-9]+\\)) : " 1 2)
         ant java perl))
+;; Add color formatting to *compilation* buffer
+;; (add-hook 'compilation-filter-hook
+;;           (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
+(ignore-errors
+  (require 'ansi-color)
+  (defun colorize-compilation-buffer ()
+    (when (eq major-mode 'compilation-mode)
+      (let ((inhibit-read-only t))
+        (if (boundp 'compilation-filter-start)
+            (ansi-color-apply-on-region compilation-filter-start (point))))))
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
 (add-hook
  'expand-load-hook
@@ -735,11 +777,10 @@
 ;; (standard-display-european 1)
 
 ;;(pc-bindings-mode)
-;;(require 'highlight-beyond-fill-column nil t)
 ;;(mouse-avoidance-mode 'exile)
 ;;(autoload 'xsl-mode "xslide" "Major mode for XSL stylesheets." t)
 ;;(autoload 'javascript-mode "javascript" nil t)
-;; (autoload 'visual-basic-mode "visual-basic-mode" "Visual Basic mode." t)
+(autoload 'visual-basic-mode "visual-basic-mode" "Visual Basic mode." t)
 ;; (autoload 'xslt-process-mode "xslt-process" "Emacs XSLT processing" t)
 ;; (autoload 'autoit-mode "autoit-mode")
 ;; (autoload 'powershell-mode "powershell-mode" nil t)
@@ -747,6 +788,11 @@
 ;;(autoload 'csharp-mode "csharp-mode")
 ;;(setq eglot-server-programs '((java-mode . ("127.0.0.1" "48032"))))
 (setq eglot-server-programs '((java-mode . ("/cygdrive/C/Program Files/dev/jdk-11.0.1/bin/java.exe" "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044" "-Declipse.application=org.eclipse.jdt.ls.core.id1" "-Dosgi.bundles.defaultStartLevel=4" "-Declipse.product=org.eclipse.jdt.ls.core.product" "-Dlog.level=ALL" "-noverify" "-Xmx1G" "-jar" "C:\\Program Files\\dev\\jdt-language-server-0.27.0-201810230512\\plugins\\org.eclipse.equinox.launcher_1.5.200.v20180922-1751.jar" "-configuration" "C:\\Program Files\\dev\\jdt-language-server-0.27.0-201810230512\\config_win" "-data" "C:\\Users\\bernh\\Documents\\dev\\eclipse.jdt.ls" "--add-modules=ALL-SYSTEM" "--add-opens" "java.base/java.util=ALL-UNNAMED" "--add-opens" "java.base/java.lang=ALL-UNNAMED" "-XX:+UseG1GC" "-XX:+UseStringDeduplication"))))
+(require 'mvn)
+(defun my-mvn-test ()
+    (interactive)
+    (mvn "test" "-Dcucumber.options=\"--tags @SCOPE-553\""))
+
 (when (require 'js2-mode nil t)
   ;;(autoload 'js2-mode "js2-mode" nil t)
   (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
@@ -858,6 +904,8 @@
 (defun ediff-list () (interactive)
        (call-ediff 'ediff nil))
 
+(org-clock-persistence-insinuate)
+(remove-hook 'org-cycle-hook 'org-cycle-hide-drawers)
 (eval-after-load 'org
   '(progn
      (setq org-level-faces
@@ -927,20 +975,23 @@
   (call-process-shell-command cmd nil 0 t))
 (defun open-in-eclipse ()
   (interactive)
-  (let* ((exe "/cygdrive/c/Users/bernh/eclipse/java-2018-09/eclipse/eclipse")
+  (let* ((exe "/cygdrive/c/Users/QXL9781/eclipse/java-2018-09/eclipse/eclipse")
          (path (file-name-nondirectory (buffer-name)))
          (cmd (concat exe " --launcher.openFile " path)))
     (shell-command cmd)))
 
 (defun my-jsbeautify (buf)
-  (interactive "bBuffer: \n")
+  (interactive "i" ;;"bBuffer: \n"
+               )
+  (unless buf (setq buf (buffer-name)))
   (set-buffer buf)
-  (let ((dir default-directory)
+  (let* ((dir default-directory)
         (tmp (make-temp-file "js-beautify"))
         (out "jsbeautify")
         (coding-system-for-read 'dos)
-        (type (cond ((string-match "\.html$" buf) "html")
-                    ((string-match "\.js$" buf) "js")
+        (name (buffer-file-name))
+        (type (cond ((string-match "\.html$" name) "html")
+                    ((string-match "\.js$" name) "js")
                     (t (completing-read "Type: " '("js" "html"))))))
     (cd "~")
     (write-region (point-min) (point-max) tmp)
@@ -949,7 +1000,7 @@
     (call-process-shell-command (concat "js-beautify.cmd --type " type) tmp out)
     (cd dir)
     (ebuffers out (buffer-name))
-    (delete-file out)))
+    (delete-file tmp)))
 
 (defun dired-sort-size ()
   (interactive)
@@ -1028,9 +1079,15 @@
   (interactive)
   (yank-pop -1))
 (global-set-key "\M-Y" 'yank-pop-backwards)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key [f9] 'open-in-eclipse)
 
 (when (timeclock-currently-in-p) (timeclock-out))
 (timeclock-in nil "dummy")
 (recentf-mode 1)
 (when (file-exists-p recentf-save-file) (recentf-open-files))
+
+(setq url-proxy-services
+      '(("http" . "127.0.0.1:3128")
+        ("https" . "127.0.0.1:3128")))
