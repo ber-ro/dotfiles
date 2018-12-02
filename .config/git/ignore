@@ -1,0 +1,5 @@
+*.diff
+*.bak
+
+# Eclipse
+*.jpage

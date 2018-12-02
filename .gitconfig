@@ -1,8 +1,6 @@
-# This is Git's per-user configuration file.
 [user]
-# Please adapt and uncomment the following lines:
-name = GROUPINFRA\\rotterb
-email = bernhard.rotterb@cgi.com
+	name = Bernhard Rotter
+	email = bernhard.rotter@gmail.com
 [core]
 	filemode = false
 [alias]
@@ -10,20 +8,20 @@ email = bernhard.rotterb@cgi.com
 	ci = commit
 	br = branch
 	st = status 
-
+[http]
+#	proxy = http://127.0.0.1:3128
 [diff]
 	tool = ediff
-# [difftool "ediff"]
-# cmd = emacsclient --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
-
+[difftool "ediff"]
+  cmd = emacsclient --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
 [merge]
   conflictstyle = diff3
-  tool = ediff
-[mergetool "ediff"]
- cmd = emacsclient -c -a \"\"  --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\")\"
- #cmd = emacsclient --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" \\\"$MERGED\\\")\"
- trustExitCode = true
-       
+  tool = e-merge
+[mergetool "e-merge"]
+  cmd = emacsclient -a \"\"  --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\")\"
+ #trustExitCode = true
+[mergetool "kdiff3"]
+  path=/cygdrive/c/Programme/ut/KDiff3/kdiff3
 [gui]
 	fontui = -family \"DejaVu Sans\" -size 8 -weight normal -slant roman -underline 0 -overstrike 0
 	fontdiff = -family \"DejaVu Sans Mono\" -size 8 -weight normal -slant roman -underline 0 -overstrike 0

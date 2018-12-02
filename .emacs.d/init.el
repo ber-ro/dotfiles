@@ -71,7 +71,7 @@
  '(bs-default-configuration "all")
  '(bs-max-window-height 1000)
  '(c-backslash-max-column 79)
- '(c-basic-offset 3)
+ '(c-basic-offset 4)
  '(c-default-style "Bernhard")
  '(c-echo-syntactic-information-p t)
  '(calendar-time-display-form
@@ -117,6 +117,9 @@
  '(company-idle-delay 0)
  '(company-minimum-prefix-length 2)
  '(compilation-scroll-output t)
+ '(compilation-search-path
+   (quote
+    (nil "src/test/java/acceptancetests/pages" "src/test/java/acceptancetests/steps" "src/test/java/acceptancetests/base" "src/test/java/acceptancetests/runner")))
  '(completion-styles (quote (basic partial-completion emacs22 substring)))
  '(cperl-auto-newline nil)
  '(cperl-auto-newline-after-colon t)
@@ -148,9 +151,9 @@
  '(dired-recursive-copies t)
  '(dired-recursive-deletes (quote top))
  '(display-time-24hr-format t)
- '(ediff-diff-options "")
+ '(ediff-default-filtering-regexp "")
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
- '(electric-indent-mode t)
+ '(electric-indent-mode nil)
  '(electric-layout-mode nil)
  '(electric-pair-mode t)
  '(electric-pair-pairs (quote ((34 . 34) (39 . 39))))
@@ -227,6 +230,7 @@
  '(menu-bar-mode nil)
  '(message-log-max t)
  '(moccur-use-ee t)
+ '(mode-require-final-newline nil)
  '(mouse-wheel-mode t nil (mwheel))
  '(org-agenda-files "~/org/.agenda_files")
  '(org-agenda-use-time-grid nil)
@@ -266,6 +270,7 @@
  '(recentf-exclude (quote ("[/\\]te?mp[/\\]\\|\\.timelog$\\|\\.ido\\.last$")))
  '(recentf-max-saved-items 1000)
  '(regexp-search-ring-max 160)
+ '(require-final-newline nil)
  '(revert-without-query (quote ("")))
  '(rng-nxml-auto-validate-flag nil)
  '(savehist-additional-variables (quote (compile-command)))
@@ -281,6 +286,7 @@
  '(show-paren-mode t nil (paren))
  '(show-paren-style (quote mixed))
  '(show-trailing-whitespace t)
+ '(smerge-command-prefix "v")
  '(sort-fold-case t t)
  '(speedbar-frame-parameters
    (quote
@@ -337,6 +343,7 @@
 ;;
 ;; This removes unsightly ^M characters.
 (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
+(setenv "PAGER" "")
 
 (when (require 'package nil t)
   (add-to-list 'package-archives
@@ -475,6 +482,7 @@
 
 (setq diff-switches "-c")
 ;;(setq ediff-combination-pattern '("" "" ""))
+(setq ediff-diff-ok-lines-regexp "\\(.?\\)")
 
 (put 'dired-do-delete 'disabled nil)
 (put 'downcase-region 'disabled nil)
@@ -577,6 +585,13 @@
   )
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
+;; (add-hook 'java-mode-hook
+;;           (lambda ()
+;;             (setq c-basic-offset 4)
+;;             (setq c-default-style "bsd")))
+;; (require 'lsp-java)
+;; (add-hook 'java-mode-hook #'lsp-java-enable)
+
 ;; (require 'align)
 ;; (setq
 ;;  align-rules-list
@@ -610,6 +625,17 @@
 : \\(?:\\(?:fatal \\)?error\\|warnin\\(g\\)\\) C[0-9]+:" 2 3 nil (4))
         ("^\\(?:[0-9]+>\\)?[ \t]*\\([^(\t\n]+\\)(\\([0-9]+\\)) : " 1 2)
         ant java perl))
+;; Add color formatting to *compilation* buffer
+;; (add-hook 'compilation-filter-hook
+;;           (lambda () (ansi-color-apply-on-region (point-min) (point-max))))
+(ignore-errors
+  (require 'ansi-color)
+  (defun colorize-compilation-buffer ()
+    (when (eq major-mode 'compilation-mode)
+      (let ((inhibit-read-only t))
+        (if (boundp 'compilation-filter-start)
+            (ansi-color-apply-on-region compilation-filter-start (point))))))
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
 (add-hook
  'expand-load-hook
@@ -657,7 +683,7 @@
 (setq hexl-options "-hex -iso")
 (add-hook 'makefile-mode-hook '(lambda () (modify-syntax-entry ?_ "w")))
 (windmove-default-keybindings)
-
+(fset 'yes-or-no-p 'y-or-n-p)
 ;;(dynamic-completion-mode)
 
 (setq backup-ignore
@@ -754,6 +780,11 @@
 ;;(autoload 'csharp-mode "csharp-mode")
 ;;(setq eglot-server-programs '((java-mode . ("127.0.0.1" "48032"))))
 (setq eglot-server-programs '((java-mode . ("/cygdrive/C/Program Files/dev/jdk-11.0.1/bin/java.exe" "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044" "-Declipse.application=org.eclipse.jdt.ls.core.id1" "-Dosgi.bundles.defaultStartLevel=4" "-Declipse.product=org.eclipse.jdt.ls.core.product" "-Dlog.level=ALL" "-noverify" "-Xmx1G" "-jar" "C:\\Program Files\\dev\\jdt-language-server-0.27.0-201810230512\\plugins\\org.eclipse.equinox.launcher_1.5.200.v20180922-1751.jar" "-configuration" "C:\\Program Files\\dev\\jdt-language-server-0.27.0-201810230512\\config_win" "-data" "C:\\Users\\bernh\\Documents\\dev\\eclipse.jdt.ls" "--add-modules=ALL-SYSTEM" "--add-opens" "java.base/java.util=ALL-UNNAMED" "--add-opens" "java.base/java.lang=ALL-UNNAMED" "-XX:+UseG1GC" "-XX:+UseStringDeduplication"))))
+(when (require 'mvn nil t)
+  (defun my-mvn-test ()
+    (interactive)
+    (mvn "test" "-Dcucumber.options=\"--tags @SCOPE-553\"")))
+
 (when (require 'js2-mode nil t)
   ;;(autoload 'js2-mode "js2-mode" nil t)
   (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
@@ -1040,9 +1071,9 @@
   (yank-pop -1))
 (global-set-key "\M-Y" 'yank-pop-backwards)
 (global-set-key "\C-ca" 'org-agenda)
+(global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key [f9] 'open-in-eclipse)
 
-(fset 'yes-or-no-p 'y-or-n-p)
 (when (timeclock-currently-in-p) (timeclock-out))
 (timeclock-in nil "dummy")
 (recentf-mode 1)
