@@ -344,6 +344,14 @@
 ;; This removes unsightly ^M characters.
 (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
 (setenv "PAGER" "")
+(defun my-eshell-history ()
+  (interactive)
+  (insert
+   (completing-read
+    "Eshell history: "
+    (delete-dups (ring-elements eshell-history-ring)))))
+(defun my-eshell-hook () (local-set-key (kbd "M-r") 'my-eshell-history))
+(add-hook 'eshell-mode-hook 'my-eshell-hook)
 
 (when (require 'package nil t)
   (add-to-list 'package-archives
@@ -952,9 +960,10 @@
 ;;(advice-add 'ido-active :before-while #'my-complete-enable)
 (advice-add 'icomplete-minibuffer-setup :before-while #'my-complete-enable)
 (when (require 'icomplete nil t)
-  (define-key icomplete-minibuffer-map (kbd "<return>") 'icomplete-force-complete-and-exit)
-  (define-key icomplete-minibuffer-map (kbd "<M-return>") 'exit-minibuffer)
-  (define-key icomplete-minibuffer-map (kbd "<S-tab>") 'minibuffer-force-complete))
+  ;; (define-key icomplete-minibuffer-map (kbd "<return>") 'icomplete-force-complete-and-exit)
+  ;; (define-key icomplete-minibuffer-map (kbd "<M-return>") 'exit-minibuffer)
+  ;; (define-key icomplete-minibuffer-map (kbd "<S-tab>") 'minibuffer-force-complete)
+)
 
 (defun yank-dospath () (interactive)
        (when (stringp (w32-get-clipboard-data))
