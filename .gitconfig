@@ -24,3 +24,6 @@ email = bernhard.rotterb@cgi.com
  #cmd = emacsclient --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" \\\"$MERGED\\\")\"
  trustExitCode = true
        
+[gui]
+	fontui = -family \"DejaVu Sans\" -size 8 -weight normal -slant roman -underline 0 -overstrike 0
+	fontdiff = -family \"DejaVu Sans Mono\" -size 8 -weight normal -slant roman -underline 0 -overstrike 0

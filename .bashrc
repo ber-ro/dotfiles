@@ -26,11 +26,12 @@ PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-TMP=/cygdrive/c/Users/rotterb/AppData/Local/Temp
+#TMP=/cygdrive/c/Users/rotterb/AppData/Local/Temp
 TEMP=$TMP
 #export NODE_PATH=D:\\Benutzer-Profile\\rotterb\\AppData\\Roaming\\npm\\node_modules
 PERLLIB=$PERLLIB:~/bin
 LANG=C # ediff
+export DISPLAY=:0.0
 
 if [[ $INSIDE_EMACS ]]; then
   export PS1="\\w\\$ "
