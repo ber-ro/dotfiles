@@ -1,0 +1,12 @@
+{
+  "indent_size": 4
+  ,"indent_char": " "
+  ,"indent_scripts":"normal"
+  , "brace_style": "preserve-inline"
+  , "_comma_first":true
+  , "operator_position": "after-newline"
+  , "preserve_newlines":true
+  , "space_after_anon_function": true
+  , "_unindent_chained_methods":true
+  , "_wrap_line_length": 90
+}

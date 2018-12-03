@@ -1,0 +1,52 @@
+--- # -*- mode: yaml -*-
+destination: '/cygdrive/e/rsync backup 3'
+source:
+  - "/cygdrive/c/Users/rotterb":
+    - Documents/
+    #- env/
+    #- Favorites/
+    - "AppData/Local/Google/Chrome/User Data/Default/Bookmarks"
+    #- AppData/Roaming/Code/User/settings.json
+    - [".atom/*.{coffee,cson,less}", atom]
+  - ["/cygdrive/c/cygwin64/home/rotterb/","rotterb-cygwin"]
+optional:
+  bck:
+    - /home/rotterb/.bck/
+  full:
+    - ["/cygdrive/c/Users/rotterb/", rotterb-full]
+  pst:
+    - ["/cygdrive/c/Users/rotterb/Documents/Outlook-Dateien/*.pst", pst]
+exclude: |
+  *.au|*.ipa|*.ipsw|*.pst|*.ost
+  CachedData #*[cC]ache*.dat
+  #*[cC]ache*.db
+  *Ditto**.db|*.lock
+  # *.[aA][vV][iI]|*.divx|*.m2t|*.mp?|*.wmv
+  *.iso|*.vdi|*.vmdk
+  *.tmp|*.sqlite|*.db|*.xpi|*.dmp|*.dll|[lL]ogs #|*.log*
+  *[cC]ache#|*[rR]ecent*|*thumbnails
+  #.bash_history|.gvfs|gvfs-metadata|.xsession-errors|.jd|log*.txt
+  #wine-1.4|drive_c
+  mybook.log|.zala/0|kaffeine/dvb-?|linux-x86
+  Pepper Data|datareporting
+  [nN][tT][uU][sS][eE][rR].[dD][aA][tT]*
+  AppData #/LocalLow|PGP Corporation
+  AppData/Local#>atom>assembly>Apple Computer>Microsoft Help>Microsoft>Skype
+  #AppData/Local>Packages>Google/Chrome>HP/ALM-Client>Mozilla>Comms>TileDataLayer
+  AppData/Roaming>Adobe>Apple*>Juniper Networks>Foxit Software>LibreOffice
+  AppData/Roaming>Microsoft#/Document Building Blocks>Microsoft/Templates
+  AppData/Roaming>Skype>Notepad++/themes>Atom/Local*Storage
+  Downloads|Music/iTunes|Visual Studio 2013|WizKit
+  Pulse Secure/Setup Client
+  .atom|.vscode #>blob-store>packages>.node-gyp>.apm|.jenkins|.node-gyp
+  .metadata|org.eclipse.oomph.*|node_modules
+  eclipse|.eclipse|.p2 #/java-mars|.p2/pool|eclipse-installer|javascript-neon|php-mars
+  NetBeans/8.1
+  ElevatedDiagnostics|Crash Reports|Firefox #/Profiles/*/extensions
+  dev|env/emacs*|.emacs.d/elpa|Snapshots/**.sav #|.emacs.d/history|*ido*
+  tmp|Temp|trash|.bck|radeon|_vti_pvt|Fiddler2 #|desktop.ini
+  .m2/repository
+ignore: |
+  *.msp|*.o|*.elc|*.log*|*.dmp|*.info|deps|etc/charsets/*.map|node_modules
+ignore-source: |
+  *.exe

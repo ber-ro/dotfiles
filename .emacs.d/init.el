@@ -288,7 +288,7 @@
  '(select-enable-clipboard t)
  '(send-mail-function (quote mailclient-send-it))
  '(sentence-end-double-space nil)
- '(sgml-basic-offset 3)
+ '(sgml-basic-offset 4)
  '(sh-basic-offset 2)
  '(sh-indentation 2)
  '(show-paren-mode t nil (paren))
@@ -352,6 +352,14 @@
 ;; This removes unsightly ^M characters.
 (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
 (setenv "PAGER" "")
+(defun my-eshell-history ()
+  (interactive)
+  (insert
+   (completing-read
+    "Eshell history: "
+    (delete-dups (ring-elements eshell-history-ring)))))
+(defun my-eshell-hook () (local-set-key (kbd "M-r") 'my-eshell-history))
+(add-hook 'eshell-mode-hook 'my-eshell-hook)
 
 (when (require 'package nil t)
   (add-to-list 'package-archives
@@ -690,7 +698,7 @@
 (setq-default ztree-diff-filter-list nil)
 (setq hexl-options "-hex -iso")
 (add-hook 'makefile-mode-hook '(lambda () (modify-syntax-entry ?_ "w")))
-
+(windmove-default-keybindings)
 (fset 'yes-or-no-p 'y-or-n-p)
 ;;(dynamic-completion-mode)
 
@@ -788,10 +796,10 @@
 ;;(autoload 'csharp-mode "csharp-mode")
 ;;(setq eglot-server-programs '((java-mode . ("127.0.0.1" "48032"))))
 (setq eglot-server-programs '((java-mode . ("/cygdrive/C/Program Files/dev/jdk-11.0.1/bin/java.exe" "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044" "-Declipse.application=org.eclipse.jdt.ls.core.id1" "-Dosgi.bundles.defaultStartLevel=4" "-Declipse.product=org.eclipse.jdt.ls.core.product" "-Dlog.level=ALL" "-noverify" "-Xmx1G" "-jar" "C:\\Program Files\\dev\\jdt-language-server-0.27.0-201810230512\\plugins\\org.eclipse.equinox.launcher_1.5.200.v20180922-1751.jar" "-configuration" "C:\\Program Files\\dev\\jdt-language-server-0.27.0-201810230512\\config_win" "-data" "C:\\Users\\bernh\\Documents\\dev\\eclipse.jdt.ls" "--add-modules=ALL-SYSTEM" "--add-opens" "java.base/java.util=ALL-UNNAMED" "--add-opens" "java.base/java.lang=ALL-UNNAMED" "-XX:+UseG1GC" "-XX:+UseStringDeduplication"))))
-(require 'mvn)
-(defun my-mvn-test ()
+(when (require 'mvn nil t)
+  (defun my-mvn-test ()
     (interactive)
-    (mvn "test" "-Dcucumber.options=\"--tags @SCOPE-553\""))
+    (mvn "test" "-Dcucumber.options=\"--tags @SCOPE-553\"")))
 
 (when (require 'js2-mode nil t)
   ;;(autoload 'js2-mode "js2-mode" nil t)
@@ -960,9 +968,10 @@
 ;;(advice-add 'ido-active :before-while #'my-complete-enable)
 (advice-add 'icomplete-minibuffer-setup :before-while #'my-complete-enable)
 (when (require 'icomplete nil t)
-  (define-key icomplete-minibuffer-map (kbd "<return>") 'icomplete-force-complete-and-exit)
-  (define-key icomplete-minibuffer-map (kbd "<M-return>") 'exit-minibuffer)
-  (define-key icomplete-minibuffer-map (kbd "<S-tab>") 'minibuffer-force-complete))
+  ;; (define-key icomplete-minibuffer-map (kbd "<return>") 'icomplete-force-complete-and-exit)
+  ;; (define-key icomplete-minibuffer-map (kbd "<M-return>") 'exit-minibuffer)
+  ;; (define-key icomplete-minibuffer-map (kbd "<S-tab>") 'minibuffer-force-complete)
+)
 
 (defun yank-dospath () (interactive)
        (when (stringp (w32-get-clipboard-data))
@@ -1036,9 +1045,8 @@
 
 ;;(global-set-key "\C-x\C-c" 'expunge-and-exit)
 
-(global-set-key [S-down] '(lambda () (interactive) (scroll-up 1)))
-(global-set-key [S-up] '(lambda () (interactive) (scroll-down 1)))
-
+;; (global-set-key [S-down] '(lambda () (interactive) (scroll-up 1)))
+;; (global-set-key [S-up] '(lambda () (interactive) (scroll-down 1)))
 (global-set-key [M-up] 'dired-jump)
 (global-set-key [M-right] 'bs-cycle-previous)
 (global-set-key [M-left] 'bs-cycle-next)
