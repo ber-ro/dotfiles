@@ -7,6 +7,8 @@
 	fileMode = false
 [http]
 	proxy = http://127.0.0.1:3128
+[https]
+	proxy = http://127.0.0.1:3128
 [mergetool "emerge"]
  cmd = emacsclient --eval \"(ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$OUTPUT\\\")\"
 [diff]
