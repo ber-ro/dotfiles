@@ -699,7 +699,6 @@
 (setq hexl-options "-hex -iso")
 (add-hook 'makefile-mode-hook '(lambda () (modify-syntax-entry ?_ "w")))
 (windmove-default-keybindings)
-(fset 'yes-or-no-p 'y-or-n-p)
 ;;(dynamic-completion-mode)
 
 (setq backup-ignore
@@ -972,6 +971,7 @@
   ;; (define-key icomplete-minibuffer-map (kbd "<M-return>") 'exit-minibuffer)
   ;; (define-key icomplete-minibuffer-map (kbd "<S-tab>") 'minibuffer-force-complete)
 )
+(fset 'yes-or-no-p 'y-or-n-p)
 
 (defun yank-dospath () (interactive)
        (when (stringp (w32-get-clipboard-data))

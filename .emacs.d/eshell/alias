@@ -1,4 +1,5 @@
 alias dgit git --git-dir ~/.dotfiles/.git --work-tree=$HOME $*
+alias g git $*
 alias h history
 alias l ls $*
 alias ll ls -l
