@@ -10,6 +10,8 @@
 	st = status 
 [http]
 #	proxy = http://127.0.0.1:3128
+[https]
+#	proxy = http://127.0.0.1:3128
 [diff]
 	tool = ediff
 [difftool "ediff"]

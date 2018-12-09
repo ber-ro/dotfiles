@@ -241,9 +241,18 @@
  '(org-startup-truncated nil)
  '(outline-auto-activation "ask")
  '(outline-minor-mode t t)
+ '(package-load-list
+   (quote
+    (all
+     (eglot nil)
+     (lsp-java nil)
+     (lsp-mode nil)
+     (ztree nil)
+     (meghanada nil)
+     (magit nil))))
  '(package-selected-packages
    (quote
-    (web-mode ac-js2 auto-complete csharp-mode electric-spacing highlight-thing hl-anything js2-mode pug-mode refine yaml-mode ztree)))
+    (mvn feature-mode ac-js2 auto-complete csharp-mode electric-spacing highlight-thing hl-anything js2-mode magit powershell pug-mode refine web-mode yaml-mode yasnippet ztree)))
  '(parens-require-spaces nil)
  '(perl-continued-statement-offset 2)
  '(perl-indent-continued-arguments 2)
@@ -691,7 +700,6 @@
 (setq hexl-options "-hex -iso")
 (add-hook 'makefile-mode-hook '(lambda () (modify-syntax-entry ?_ "w")))
 (windmove-default-keybindings)
-(fset 'yes-or-no-p 'y-or-n-p)
 ;;(dynamic-completion-mode)
 
 (setq backup-ignore
@@ -964,6 +972,7 @@
   ;; (define-key icomplete-minibuffer-map (kbd "<M-return>") 'exit-minibuffer)
   ;; (define-key icomplete-minibuffer-map (kbd "<S-tab>") 'minibuffer-force-complete)
 )
+(fset 'yes-or-no-p 'y-or-n-p)
 
 (defun yank-dospath () (interactive)
        (when (stringp (w32-get-clipboard-data))
