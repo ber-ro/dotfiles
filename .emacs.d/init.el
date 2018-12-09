@@ -252,7 +252,7 @@
      (magit nil))))
  '(package-selected-packages
    (quote
-    (mvn feature-mode ac-js2 auto-complete csharp-mode electric-spacing highlight-thing hl-anything js2-mode magit powershell pug-mode refine web-mode yaml-mode yasnippet ztree)))
+    (mvn feature-mode ac-js2 auto-complete csharp-mode electric-spacing highlight-thing hl-anything js2-mode markdown-mode powershell pug-mode refine web-mode yaml-mode yasnippet ztree)))
  '(parens-require-spaces nil)
  '(perl-continued-statement-offset 2)
  '(perl-indent-continued-arguments 2)
