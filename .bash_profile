@@ -19,7 +19,7 @@ fi
 #   PATH="${HOME}/bin:${PATH}"
 # fi
 
-export PATH="/usr/local/bin:/usr/bin:/cygdrive/c/Program Files/Common Files/Microsoft Shared/Microsoft Online Services:/cygdrive/c/Program Files (x86)/Common Files/Microsoft Shared/Microsoft Online Services:/cygdrive/c/Windows/system32:/cygdrive/c/Windows:/cygdrive/c/Windows/System32/Wbem:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files (x86)/Microsoft Application Virtualization Client:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files/Citrix/System32:/cygdrive/c/Program Files/Citrix/ICAService:/cygdrive/c/Program Files/Citrix/Virtual Desktop Agent:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Users/QXL9781/jdk-11.0.1/bin:/cygdrive/c/Users/QXL9781/apache-maven-3.5.4/bin/:/cygdrive/c/Program Files/nodejs"
+export PATH="/usr/local/bin:/usr/bin:/cygdrive/c/Program Files/Common Files/Microsoft Shared/Microsoft Online Services:/cygdrive/c/Program Files (x86)/Common Files/Microsoft Shared/Microsoft Online Services:/cygdrive/c/Windows/system32:/cygdrive/c/Windows:/cygdrive/c/Windows/System32/Wbem:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files (x86)/Microsoft Application Virtualization Client:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files/Citrix/System32:/cygdrive/c/Program Files/Citrix/ICAService:/cygdrive/c/Program Files/Citrix/Virtual Desktop Agent:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Users/QXL9781/jdk-11.0.1/bin:/cygdrive/c/Users/QXL9781/apache-maven-3.5.4/bin/:/cygdrive/c/Program Files/nodejs:~/bin"
 export JAVA_HOME=/cygdrive/c/Users/QXL9781/jdk-11.0.1
 export EDITOR=emacsclient-w32
 

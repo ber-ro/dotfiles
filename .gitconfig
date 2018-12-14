@@ -4,10 +4,12 @@
 [core]
 	filemode = false
 [alias]
+  a = add
 	co = checkout
 	ci = commit
-	br = branch
-	st = status 
+	d = diff
+	l = log
+	s = status
 [http]
 	proxy = http://127.0.0.1:3128
 [https]

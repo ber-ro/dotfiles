@@ -121,6 +121,7 @@
    (quote
     (nil "src/test/java/acceptancetests/pages" "src/test/java/acceptancetests/steps" "src/test/java/acceptancetests/base" "src/test/java/acceptancetests/runner")))
  '(completion-styles (quote (basic partial-completion emacs22 substring)))
+ '(confirm-nonexistent-file-or-buffer t)
  '(cperl-auto-newline nil)
  '(cperl-auto-newline-after-colon t)
  '(cperl-brace-offset -2)
@@ -134,6 +135,7 @@
  '(dabbrev-case-replace nil)
  '(default-frame-alist (quote ((width . 100) (top . 10))))
  '(delete-old-versions (quote other))
+ '(diff-switches "-cw")
  '(directory-free-space-program nil)
  '(dired-backup-overwrite t)
  '(dired-clean-up-buffers-too nil)
@@ -152,6 +154,7 @@
  '(dired-recursive-deletes (quote top))
  '(display-time-24hr-format t)
  '(ediff-default-filtering-regexp "")
+ '(ediff-diff-options "-w")
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(electric-indent-mode nil)
  '(electric-layout-mode nil)
@@ -295,7 +298,7 @@
  '(show-paren-style (quote mixed))
  '(show-trailing-whitespace t)
  '(smerge-command-prefix "v")
- '(sort-fold-case t t)
+ '(sort-fold-case t)
  '(speedbar-frame-parameters
    (quote
     ((minibuffer)
