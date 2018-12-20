@@ -3,6 +3,10 @@
 # Please adapt and uncomment the following lines:
 name = GROUPINFRA\\rotterb
 email = bernhard.rotterb@cgi.com
+
+[http]
+	proxy = cache1.uk.logica.com:80
+
 [core]
 	filemode = false
 [alias]
