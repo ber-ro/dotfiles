@@ -237,8 +237,10 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(org-agenda-files "~/org/.agenda_files")
  '(org-agenda-use-time-grid nil)
+ '(org-clock-continuously t)
  '(org-clock-idle-time 15)
  '(org-clock-persist t)
+ '(org-duration-format (quote ((special . h:mm))))
  '(org-export-headline-levels 0)
  '(org-html-doctype "html5")
  '(org-startup-truncated nil)
@@ -250,9 +252,11 @@
      (eglot nil)
      (lsp-java nil)
      (lsp-mode nil)
-     (ztree nil)
      (meghanada nil)
-     (magit nil))))
+     (magit nil)
+     (ztree nil)
+     (web-mode nil)
+)))
  '(package-selected-packages
    (quote
     (mvn feature-mode ac-js2 auto-complete csharp-mode electric-spacing highlight-thing hl-anything js2-mode markdown-mode powershell pug-mode refine web-mode yaml-mode yasnippet ztree)))
@@ -403,7 +407,7 @@
           web-mode-css-indent-offset off
           web-mode-markup-indent-offset off
           web-mode-style-padding off
-          web-mode-script-padding 4))
+          web-mode-script-padding 2))
   (defun my-web-mode-hook ()
     (my-web-mode-indent 2)
     (add-to-list 'web-mode-comment-formats '("javascript" . "//"))
@@ -971,7 +975,7 @@
 ;;(advice-add 'ido-active :before-while #'my-complete-enable)
 (advice-add 'icomplete-minibuffer-setup :before-while #'my-complete-enable)
 (when (require 'icomplete nil t)
-  ;; (define-key icomplete-minibuffer-map (kbd "<return>") 'icomplete-force-complete-and-exit)
+  (define-key icomplete-minibuffer-map (kbd "<C-return>") 'icomplete-force-complete-and-exit)
   ;; (define-key icomplete-minibuffer-map (kbd "<M-return>") 'exit-minibuffer)
   ;; (define-key icomplete-minibuffer-map (kbd "<S-tab>") 'minibuffer-force-complete)
 )
