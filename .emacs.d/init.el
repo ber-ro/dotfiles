@@ -118,6 +118,7 @@
  '(company-minimum-prefix-length 2)
  '(compilation-scroll-output t)
  '(completion-styles (quote (basic partial-completion emacs22 substring)))
+ '(confirm-nonexistent-file-or-buffer t)
  '(cperl-auto-newline nil)
  '(cperl-auto-newline-after-colon t)
  '(cperl-brace-offset -2)
@@ -129,12 +130,7 @@
  '(create-lockfiles nil)
  '(css-indent-offset 2)
  '(dabbrev-case-replace nil)
- '(default-frame-alist
-    (quote
-     ((width . 100)
-      (top . 25)
-      (font . "Lucida Console-8")
-      (height . 90))))
+ '(default-frame-alist (quote ((width . 100) (top . 10))))
  '(delete-old-versions (quote other))
  '(directory-free-space-program nil)
  '(dired-backup-overwrite t)
@@ -301,7 +297,7 @@
  '(show-paren-style (quote mixed))
  '(show-trailing-whitespace t)
  '(smerge-command-prefix "v")
- '(sort-fold-case t t)
+ '(sort-fold-case t)
  '(speedbar-frame-parameters
    (quote
     ((minibuffer)
@@ -988,6 +984,10 @@
 (defun silent-command (cmd)
   (interactive "sCommand: ")
   (call-process-shell-command cmd nil 0 t))
+(defun cmd-exe ()
+  (let ((proc (start-process "cmd" nil "cmd.exe" "/C" "start" "cmd.exe")))
+    (set-process-query-on-exit-flag proc nil)))
+
 (defun open-in-eclipse ()
   (interactive)
   (let* ((exe "/cygdrive/c/Users/bernh/eclipse/java-2018-09/eclipse/eclipse")
@@ -1073,7 +1073,7 @@
 (global-set-key [f5] 'revert-buffer)
 (global-set-key [f6] 'start)
 (global-set-key [S-f6] 'my-jsbeautify)
-(global-set-key [C-f6] '(lambda () (interactive) (shell-command "subst")))
+(global-set-key [C-f6] 'cmd-exe)
 (global-set-key [f7] 'ffap)
 (global-set-key [C-f7] 'ffap-other-window)
 (global-set-key [f8] '(lambda () (interactive) (find-tag t t)))

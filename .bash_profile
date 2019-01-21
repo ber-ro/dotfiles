@@ -18,7 +18,9 @@ fi
 # if [ -d "${HOME}/bin" ] ; then
 #   PATH="${HOME}/bin:${PATH}"
 # fi
+export EDITOR=emacsclient-w32
+
 if [[ ${TERM} != 'screen' ]]; then
   /home/rotterb/dev/emacs-26/src/emacs-26.1.1.exe &
 fi
-[[ ${TERM} != 'screen' ]] && exec tmux
+[[ ${TERM} != 'screen' && -e /bin/tmux ]] && exec tmux

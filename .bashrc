@@ -31,6 +31,7 @@ TEMP=$TMP
 #export NODE_PATH=D:\\Benutzer-Profile\\rotterb\\AppData\\Roaming\\npm\\node_modules
 PERLLIB=$PERLLIB:~/bin
 LANG=C # ediff
+export DISPLAY=:0.0
 
 if [[ $INSIDE_EMACS ]]; then
   export PS1="\\w\\$ "
