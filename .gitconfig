@@ -2,7 +2,9 @@
 name = GROUPINFRA\\rotterb
 email = bernhard.rotterb@cgi.com
 [core]
-	filemode = false
+  filemode = false
+  whitespace = cr-at-eol
+  autocrlf = true
 [alias]
   a = add
 	co = checkout
