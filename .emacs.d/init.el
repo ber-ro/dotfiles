@@ -117,9 +117,6 @@
  '(company-idle-delay 0)
  '(company-minimum-prefix-length 2)
  '(compilation-scroll-output t)
- '(compilation-search-path
-   (quote
-    (nil "src/test/java/acceptancetests/pages" "src/test/java/acceptancetests/steps" "src/test/java/acceptancetests/base" "src/test/java/acceptancetests/runner")))
  '(completion-styles (quote (basic partial-completion emacs22 substring)))
  '(cperl-auto-newline nil)
  '(cperl-auto-newline-after-colon t)
@@ -239,7 +236,7 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(org-agenda-files "~/org/.agenda_files")
  '(org-agenda-use-time-grid nil)
- '(org-clock-continuously t)
+ '(org-clock-continuously nil)
  '(org-clock-idle-time 15)
  '(org-clock-persist t)
  '(org-duration-format (quote ((special . h:mm))))
@@ -257,8 +254,7 @@
      (meghanada nil)
      (magit nil)
      (ztree nil)
-     (web-mode nil)
-)))
+     (web-mode nil))))
  '(package-selected-packages
    (quote
     (mvn feature-mode ac-js2 auto-complete csharp-mode electric-spacing highlight-thing hl-anything js2-mode markdown-mode powershell pug-mode refine web-mode yaml-mode yasnippet ztree)))
