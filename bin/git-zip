@@ -1,0 +1,11 @@
+#!/usr/bin/perl
+
+my $dst=shift;
+if(!$dst) { $dst="~/.bck"; }
+
+psystem("git diff --name-only HEAD|zip $dst/git-`date +%Y-%m-%dt%H%M%S`.zip -@");
+
+sub psystem {
+  print "@_\n";
+  system @_;
+}

@@ -26,6 +26,9 @@
 # Set user-defined locale
 export LANG=$(locale -uU)
 
+export http_proxy="http://127.0.0.1:3128"
+export https_proxy="http://127.0.0.1:3128"
+
 # This file is not read by bash(1) if ~/.bash_profile or ~/.bash_login
 # exists.
 #
