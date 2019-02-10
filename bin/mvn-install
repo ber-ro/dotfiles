@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+
+#C:\Users\%USERNAME%\src\workspace\scope-testtool\src\lib\org.eclipse.core.commands_3.9.200.v20180827-1727.jar
+my $jar = shift;
+if ($jar !~ m%.*[\\/](.*)[\-_](.*)\.jar%) {
+  print "\nexit";
+  return;
+}
+
+my $artifact = $1;
+my $version = $2;
+$jar = `cygpath -w "$jar"`;
+chomp $jar;
+
+my $rep = "\"C:\\Users\\$ENV{USERNAME}\\src\\workspace\\repository\"";
+psystem("mvn install:install-file -Dfile=\"$jar\" -DgroupId=com.bmw.scope -DartifactId=$artifact -Dversion=$version -Dpackaging=jar -DlocalRepositoryPath=$rep");
+
+sub psystem {
+  print "@_\n";
+  system @_;
+}
