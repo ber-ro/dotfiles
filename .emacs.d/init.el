@@ -998,7 +998,7 @@
 
 (defun open-in-eclipse ()
   (interactive)
-  (let* ((exe "/cygdrive/c/Users/bernh/eclipse/java-2018-09/eclipse/eclipse")
+  (let* ((exe (substitute-env-vars "/cygdrive/c/Users/$USERNAME/eclipse/java-2018-12/eclipse/eclipse"))
          (path (file-name-nondirectory (buffer-name)))
          (cmd (concat exe " --launcher.openFile " path)))
     (shell-command cmd)))
