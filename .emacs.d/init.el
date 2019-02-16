@@ -182,6 +182,9 @@
  '(font-lock-global-modes t)
  '(font-lock-maximum-size 256000)
  '(generic-define-mswindows-modes t)
+ '(generic-extras-enable-list
+   (quote
+    (alias-generic-mode apache-conf-generic-mode apache-log-generic-mode bat-generic-mode etc-fstab-generic-mode etc-modules-conf-generic-mode etc-passwd-generic-mode etc-services-generic-mode etc-sudoers-generic-mode fvwm-generic-mode hosts-generic-mode inetd-conf-generic-mode inf-generic-mode ini-generic-mode java-manifest-generic-mode java-properties-generic-mode javascript-generic-mode mailagent-rules-generic-mode mailrc-generic-mode named-boot-generic-mode named-database-generic-mode prototype-generic-mode rc-generic-mode reg-generic-mode resolve-conf-generic-mode rul-generic-mode samba-generic-mode show-tabs-generic-mode vrml-generic-mode x-resource-generic-mode xmodmap-generic-mode)))
  '(generic-use-find-file-hook t)
  '(glasses-face (quote bold))
  '(glasses-separator "")
@@ -238,8 +241,10 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(org-agenda-files "~/org/.agenda_files")
  '(org-agenda-use-time-grid nil)
+ '(org-clock-continuously t)
  '(org-clock-idle-time 15)
  '(org-clock-persist t)
+ '(org-duration-format (quote ((special . h:mm))))
  '(org-export-headline-levels 0)
  '(org-html-doctype "html5")
  '(org-startup-truncated nil)
@@ -248,14 +253,15 @@
  '(package-load-list
    (quote
     (all
+     (eglot nil)
      (lsp-java nil)
      (lsp-mode nil)
-     (ztree nil)
      (meghanada nil)
-     (magit nil))))
+     (ztree nil)
+     (web-mode nil))))
  '(package-selected-packages
    (quote
-    (groovy-mode mvn feature-mode ac-js2 auto-complete csharp-mode electric-spacing highlight-thing hl-anything js2-mode magit powershell pug-mode refine web-mode yaml-mode yasnippet ztree)))
+    ( ac-js2 auto-complete csharp-mode electric-spacing feature-mode groovy-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
  '(parens-require-spaces nil)
  '(perl-continued-statement-offset 2)
  '(perl-indent-continued-arguments 2)
@@ -971,7 +977,7 @@
 ;;(advice-add 'ido-active :before-while #'my-complete-enable)
 (advice-add 'icomplete-minibuffer-setup :before-while #'my-complete-enable)
 (when (require 'icomplete nil t)
-  ;; (define-key icomplete-minibuffer-map (kbd "<return>") 'icomplete-force-complete-and-exit)
+  (define-key icomplete-minibuffer-map (kbd "<C-return>") 'icomplete-force-complete-and-exit)
   ;; (define-key icomplete-minibuffer-map (kbd "<M-return>") 'exit-minibuffer)
   ;; (define-key icomplete-minibuffer-map (kbd "<S-tab>") 'minibuffer-force-complete)
 )
@@ -986,9 +992,13 @@
 (defun silent-command (cmd)
   (interactive "sCommand: ")
   (call-process-shell-command cmd nil 0 t))
+(defun cmd-exe () (interactive)
+  (let ((proc (start-process "cmd" nil "cmd.exe" "/C" "start" "cmd.exe")))
+    (set-process-query-on-exit-flag proc nil)))
+
 (defun open-in-eclipse ()
   (interactive)
-  (let* ((exe (substitute-env-vars "/cygdrive/c/Users/$USERNAME/eclipse/java-2018-09/eclipse/eclipse"))
+  (let* ((exe (substitute-env-vars "/cygdrive/c/Users/$USERNAME/eclipse/java-2018-12/eclipse/eclipse"))
          (path (file-name-nondirectory (buffer-name)))
          (cmd (concat exe " --launcher.openFile " path)))
     (shell-command cmd)))
@@ -1071,7 +1081,7 @@
 (global-set-key [f5] 'revert-buffer)
 (global-set-key [f6] 'start)
 (global-set-key [S-f6] 'my-jsbeautify)
-(global-set-key [C-f6] '(lambda () (interactive) (shell-command "subst")))
+(global-set-key [C-f6] 'cmd-exe)
 (global-set-key [f7] 'ffap)
 (global-set-key [C-f7] 'ffap-other-window)
 (global-set-key [f8] '(lambda () (interactive) (find-tag t t)))
