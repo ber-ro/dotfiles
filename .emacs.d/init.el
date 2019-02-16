@@ -155,6 +155,7 @@
  '(display-time-24hr-format t)
  '(ediff-default-filtering-regexp "")
  '(ediff-diff-options "-w")
+ '(ediff-diff3-options "--strip-trailing-cr")
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(electric-indent-mode nil)
  '(electric-layout-mode nil)

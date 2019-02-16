@@ -14,6 +14,8 @@
 	proxy = http://127.0.0.1:3128
 [https]
 	proxy = http://127.0.0.1:3128
+[credential "https://github.com"]
+  username = ber-ro
 [diff]
 	tool = ediff
 [difftool "ediff"]
@@ -29,3 +31,5 @@
 [gui]
 	fontui = -family \"DejaVu Sans\" -size 8 -weight normal -slant roman -underline 0 -overstrike 0
 	fontdiff = -family \"DejaVu Sans Mono\" -size 8 -weight normal -slant roman -underline 0 -overstrike 0
+[credential]
+	helper = cache --timeout=36000
