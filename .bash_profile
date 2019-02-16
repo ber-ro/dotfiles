@@ -19,8 +19,8 @@ fi
 #   PATH="${HOME}/bin:${PATH}"
 # fi
 
-export PATH="/usr/local/bin:/usr/bin:/cygdrive/c/Program Files/Common Files/Microsoft Shared/Microsoft Online Services:/cygdrive/c/Program Files (x86)/Common Files/Microsoft Shared/Microsoft Online Services:/cygdrive/c/Windows/system32:/cygdrive/c/Windows:/cygdrive/c/Windows/System32/Wbem:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files (x86)/Microsoft Application Virtualization Client:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files/Citrix/System32:/cygdrive/c/Program Files/Citrix/ICAService:/cygdrive/c/Program Files/Citrix/Virtual Desktop Agent:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Users/$USERNAME/jdk-11.0.1/bin:/cygdrive/c/Users/$USERNAME/apache-maven-3.5.4/bin/:/cygdrive/c/Program Files/nodejs:$HOME/bin"
 export JAVA_HOME=/cygdrive/c/Users/$USERNAME/jdk-11.0.1
+export PATH="/usr/local/bin:/usr/bin:/cygdrive/c/Program Files/Common Files/Microsoft Shared/Microsoft Online Services:/cygdrive/c/Program Files (x86)/Common Files/Microsoft Shared/Microsoft Online Services:/cygdrive/c/Windows/system32:/cygdrive/c/Windows:/cygdrive/c/Windows/System32/Wbem:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files (x86)/Microsoft Application Virtualization Client:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files/Citrix/System32:/cygdrive/c/Program Files/Citrix/ICAService:/cygdrive/c/Program Files/Citrix/Virtual Desktop Agent:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:$JAVA_HOME/bin:/cygdrive/c/Users/$USERNAME/apache-maven-3.5.4/bin/:/cygdrive/c/Program Files/nodejs:$HOME/bin"
 export EDITOR=emacsclient-w32
 
 if [[ ${TERM} != 'screen' ]]; then

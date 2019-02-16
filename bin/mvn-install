@@ -7,9 +7,9 @@ if ($jar !~ m%.*[\\/](.*)[\-_](.*)\.jar%) {
   return;
 }
 
-my $artifact=$1;
-my $version=$2;
-$jar=`cygpath -w "$jar"`;
+my $artifact = $1;
+my $version = $2;
+$jar = `cygpath -w "$jar"`;
 chomp $jar;
 
 my $rep = "\"C:\\Users\\$ENV{USERNAME}\\src\\workspace\\repository\"";
