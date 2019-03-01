@@ -239,10 +239,9 @@
  '(moccur-use-ee t)
  '(mode-require-final-newline nil)
  '(mouse-wheel-mode t nil (mwheel))
- '(org-agenda-files "~/org/.agenda_files")
+ '(org-agenda-files "/cygdrive/u/org/.agenda_files")
  '(org-agenda-use-time-grid nil)
  '(org-clock-continuously t)
- '(org-clock-idle-time 15)
  '(org-clock-persist t)
  '(org-duration-format (quote ((special . h:mm))))
  '(org-export-headline-levels 0)
@@ -261,7 +260,7 @@
      (web-mode nil))))
  '(package-selected-packages
    (quote
-    ( ac-js2 auto-complete csharp-mode electric-spacing feature-mode groovy-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
+    (ac-js2 auto-complete csharp-mode electric-spacing feature-mode groovy-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
  '(parens-require-spaces nil)
  '(perl-continued-statement-offset 2)
  '(perl-indent-continued-arguments 2)
