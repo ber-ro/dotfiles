@@ -238,6 +238,7 @@
  '(org-agenda-files "/cygdrive/u/org/.agenda_files")
  '(org-agenda-use-time-grid nil)
  '(org-clock-persist t)
+ '(org-duration-format (quote ((special . h:mm))))
  '(org-export-headline-levels 0)
  '(org-html-doctype "html5")
  '(org-startup-truncated nil)
@@ -914,7 +915,7 @@
        (call-ediff 'ediff nil))
 
 (org-clock-persistence-insinuate)
-(remove-hook 'org-cycle-hook 'org-cycle-hide-drawers)
+;;(remove-hook 'org-cycle-hook 'org-cycle-hide-drawers)
 (eval-after-load 'org
   '(progn
      (setq org-level-faces

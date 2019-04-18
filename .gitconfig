@@ -2,7 +2,7 @@
 	name = Bernhard Rotter (ext.)
 	email = bernhard.rotter@partner.bmwgroup.com
 [core]
-	filemode = false
+#	filemode = false
 [alias]
   a = add
 	co = checkout

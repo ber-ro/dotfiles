@@ -19,7 +19,7 @@ fi
 #   PATH="${HOME}/bin:${PATH}"
 # fi
 
-export JAVA_HOME=/cygdrive/c/Users/$USERNAME/sw/zulu8.34.0.1-ca-jdk8.0.201-win_x64
+export JAVA_HOME=/cygdrive/c/Users/$USERNAME/sw/zulu8.36.0.1-ca-fx-jdk8.0.202-win_x64
 export PATH="/usr/local/bin:/usr/bin:/cygdrive/c/Program Files/Common Files/Microsoft Shared/Microsoft Online Services:/cygdrive/c/Program Files (x86)/Common Files/Microsoft Shared/Microsoft Online Services:/cygdrive/c/Windows/system32:/cygdrive/c/Windows:/cygdrive/c/Windows/System32/Wbem:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files (x86)/Microsoft Application Virtualization Client:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files/Citrix/System32:/cygdrive/c/Program Files/Citrix/ICAService:/cygdrive/c/Program Files/Citrix/Virtual Desktop Agent:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Users/$USERNAME/sw/apache-maven-3.6.0/bin:/cygdrive/c/Users/$USERNAME/sw/node-v10.15.1-win-x64:$JAVA_HOME/bin:$HOME/bin"
 export EDITOR=emacsclient-w32
 
