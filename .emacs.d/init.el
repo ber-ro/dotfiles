@@ -213,7 +213,7 @@
  '(indent-tabs-mode nil)
  '(indicate-buffer-boundaries (quote left))
  '(inhibit-startup-screen t)
- '(ispell-dictionary "german")
+ '(ispell-program-name "/usr/bin/hunspell")
  '(js-auto-indent-flag t)
  '(js-indent-level 2)
  '(js2-bounce-indent-p t)
@@ -261,7 +261,7 @@
      (web-mode nil))))
  '(package-selected-packages
    (quote
-    ( ac-js2 auto-complete csharp-mode electric-spacing feature-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
+    (ac-js2 auto-complete csharp-mode electric-spacing feature-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
  '(parens-require-spaces nil)
  '(perl-continued-statement-offset 2)
  '(perl-indent-continued-arguments 2)
