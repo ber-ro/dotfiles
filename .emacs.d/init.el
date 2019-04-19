@@ -240,7 +240,6 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(org-agenda-files "~/org/.agenda_files")
  '(org-agenda-use-time-grid nil)
- '(org-clock-continuously t)
  '(org-clock-idle-time 15)
  '(org-clock-persist t)
  '(org-duration-format (quote ((special . h:mm))))
@@ -257,8 +256,8 @@
      (lsp-mode nil)
      (meghanada nil)
      (magit nil)
-     (ztree nil)
-     (web-mode nil))))
+     (web-mode nil)
+     (ztree nil))))
  '(package-selected-packages
    (quote
     (ac-js2 auto-complete csharp-mode electric-spacing feature-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
