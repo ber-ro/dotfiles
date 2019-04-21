@@ -241,7 +241,6 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(org-agenda-files "/cygdrive/u/org/.agenda_files")
  '(org-agenda-use-time-grid nil)
- '(org-clock-continuously t)
  '(org-clock-persist t)
  '(org-duration-format (quote ((special . h:mm))))
  '(org-export-headline-levels 0)
