@@ -920,7 +920,7 @@
        (call-ediff 'ediff nil))
 
 (org-clock-persistence-insinuate)
-(remove-hook 'org-cycle-hook 'org-cycle-hide-drawers)
+;;(remove-hook 'org-cycle-hook 'org-cycle-hide-drawers)
 (eval-after-load 'org
   '(progn
      (setq org-level-faces
