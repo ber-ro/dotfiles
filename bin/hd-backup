@@ -43,6 +43,7 @@ my $options =
   . " --recursive --filter='dir-merge /.rsync-filter' --ignore-errors"
   . " --times --modify-window=2 --one-file-system"
   . " --itemize-changes --info= --debug=filter";
+#$options .= " --checksum";
 my $cmd = "rsync $options";
 $cmd .= " --dry-run" if ($bDryrunParam);
 print $log "$cmd\n";

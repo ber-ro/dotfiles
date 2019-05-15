@@ -913,6 +913,8 @@
 (defun ediff-list () (interactive)
        (call-ediff 'ediff nil))
 
+(with-eval-after-load 'outline
+  (add-hook 'ediff-prepare-buffer-hook #'outline-show-all))
 (org-clock-persistence-insinuate)
 (remove-hook 'org-cycle-hook 'org-cycle-hide-drawers)
 (eval-after-load 'org
@@ -984,7 +986,7 @@
 (defun silent-command (cmd)
   (interactive "sCommand: ")
   (call-process-shell-command cmd nil 0 t))
-(defun cmd-exe ()
+(defun cmd-exe () (interactive)
   (let ((proc (start-process "cmd" nil "cmd.exe" "/C" "start" "cmd.exe")))
     (set-process-query-on-exit-flag proc nil)))
 
