@@ -31,6 +31,8 @@ TEMP=$TMP
 #export NODE_PATH=D:\\Benutzer-Profile\\rotterb\\AppData\\Roaming\\npm\\node_modules
 PERLLIB=$PERLLIB:~/bin
 LANG=C # ediff
+export DICPATH=/cygdrive/c/Programme/office/libreoffice/share/extensions/dict-de
+export DICTIONARY=de_DE_frami,en_US,en_geo,en_GB,en_med
 export DISPLAY=:0.0
 
 if [[ $INSIDE_EMACS ]]; then
