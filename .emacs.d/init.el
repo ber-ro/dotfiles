@@ -155,7 +155,7 @@
  '(dired-recursive-deletes (quote top))
  '(display-time-24hr-format t)
  '(ediff-default-filtering-regexp "")
- '(ediff-diff-options "-w --strip-trailing-cr")
+ '(ediff-diff-options "--strip-trailing-cr")
  '(ediff-diff3-options "--strip-trailing-cr")
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(electric-indent-mode nil)
@@ -217,7 +217,7 @@
  '(inhibit-startup-screen t)
  '(ispell-program-name "/usr/bin/hunspell")
  '(js-auto-indent-flag t)
- '(js-indent-level 2)
+ '(js-indent-level 4)
  '(js2-bounce-indent-p t)
  '(js2-highlight-level 3)
  '(js2-strict-inconsistent-return-warning nil)
@@ -231,7 +231,8 @@
  '(lazy-lock-stealth-nice 0.25)
  '(lazy-lock-stealth-verbose t)
  '(log-edit-require-final-newline nil)
- '(ls-lisp-use-insert-directory-program t)
+ '(ls-lisp-use-insert-directory-program nil)
+ '(ls-lisp-use-string-collate nil)
  '(ls-lisp-verbosity nil)
  '(mark-even-if-inactive t)
  '(mark-ring-max 1024)
@@ -257,7 +258,7 @@
      (lsp-mode nil)
      (meghanada nil)
      (magit nil)
-     (web-mode nil)
+     (web-mode t)
      (ztree nil))))
  '(package-selected-packages
    (quote
@@ -305,7 +306,7 @@
  '(show-paren-style (quote mixed))
  '(show-trailing-whitespace t)
  '(smerge-command-prefix "v")
- '(sort-fold-case t)
+ '(sort-fold-case t t)
  '(speedbar-frame-parameters
    (quote
     ((minibuffer)
@@ -333,6 +334,7 @@
  '(unibyte-display-via-language-environment t)
  '(uniquify-buffer-name-style (quote post-forward) nil (uniquify))
  '(use-dialog-box nil)
+ '(vc-display-status nil)
  '(vc-ignore-dir-regexp
    "\\`\\(?:[\\/][\\/][^\\/]+[\\/]\\|/\\(?:net\\|afs\\|\\.\\.\\.\\)/\\)\\'\\|DavWWWRoot")
  '(vc-make-backup-files t)
@@ -409,7 +411,7 @@
           web-mode-css-indent-offset off
           web-mode-markup-indent-offset off
           web-mode-style-padding off
-          web-mode-script-padding 2))
+          web-mode-script-padding 4))
   (defun my-web-mode-hook ()
     (my-web-mode-indent 2)
     (add-to-list 'web-mode-comment-formats '("javascript" . "//"))

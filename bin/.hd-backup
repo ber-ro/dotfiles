@@ -1,5 +1,5 @@
 --- # -*- mode: yaml -*-
-destination: '/cygdrive/e/rsync backup 3'
+destination: '/cygdrive/e/rsync backup 4'
 source:
   - "/cygdrive/c/Users/rotterb":
     - Documents/
@@ -43,7 +43,7 @@ exclude: |
   eclipse|.eclipse|.p2 #/java-mars|.p2/pool|eclipse-installer|javascript-neon|php-mars
   NetBeans/8.1
   ElevatedDiagnostics|Crash Reports|Firefox #/Profiles/*/extensions
-  dev|env/emacs*|.emacs.d/elpa|Snapshots/**.sav #|.emacs.d/history|*ido*
+  dev|env/emacs*|.emacs.d/elpa|Snapshots/**.sav|sw #|.emacs.d/history|*ido*
   tmp|Temp|trash|.bck|radeon|_vti_pvt|Fiddler2 #|desktop.ini
   .m2/repository
 ignore: |
