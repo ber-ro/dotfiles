@@ -157,8 +157,9 @@
  '(dired-recursive-copies t)
  '(dired-recursive-deletes (quote top))
  '(display-time-24hr-format t)
+ '(doc-view-ghostscript-program "c:/Program Files/media/gs9.27/bin/gswin64c.exe")
  '(ediff-default-filtering-regexp "")
- '(ediff-diff-options "-w --strip-trailing-cr")
+ '(ediff-diff-options "--strip-trailing-cr")
  '(ediff-diff3-options "--strip-trailing-cr")
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(electric-indent-mode nil)
@@ -218,7 +219,7 @@
  '(indent-tabs-mode nil)
  '(indicate-buffer-boundaries (quote left))
  '(inhibit-startup-screen t)
- '(ispell-program-name "/usr/bin/hunspell")
+ '(ispell-program-name "hunspell")
  '(js-auto-indent-flag t)
  '(js-indent-level 2)
  '(js2-bounce-indent-p t)
@@ -234,7 +235,8 @@
  '(lazy-lock-stealth-nice 0.25)
  '(lazy-lock-stealth-verbose t)
  '(log-edit-require-final-newline nil)
- '(ls-lisp-use-insert-directory-program t)
+ '(ls-lisp-use-insert-directory-program nil)
+ '(ls-lisp-use-string-collate nil)
  '(ls-lisp-verbosity nil)
  '(mark-even-if-inactive t)
  '(mark-ring-max 1024)
@@ -261,12 +263,11 @@
      (meghanada nil)
      (magit nil)
      (web-mode nil)
-     (ztree nil))))
+     (ztree t))))
  '(package-selected-packages
    (quote
-    (ac-js2 auto-complete csharp-mode electric-spacing feature-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
+    (ace-window ac-js2 auto-complete csharp-mode electric-spacing feature-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
  '(parens-require-spaces nil)
- '(perl-continued-statement-offset 2)
  '(perl-indent-continued-arguments 2)
  '(perl-indent-level 2)
  '(perl-indent-parens-as-block t)
@@ -521,6 +522,19 @@
 (put 'scroll-left 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
+(let* ((cygwin-root "c:/cygwin64")
+       (cygwin-bin (concat cygwin-root "/bin")))
+  (when (and (eq 'windows-nt system-type)
+             (file-readable-p cygwin-root))
+
+    (setq exec-path (cons cygwin-bin exec-path))
+    ;;(setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
+
+    ;; NT-emacs assumes a Windows shell. Change to bash.
+    (setq shell-file-name "bash")
+    (setenv "SHELL" shell-file-name) 
+    (setq explicit-shell-file-name shell-file-name)))
+
 (cond
  ((or (equal system-type 'windows-nt)
       (equal system-type 'cygwin))
@@ -552,8 +566,12 @@
                         "/O" (path-unix2dos (get-filename))))
   (defun start () (interactive)
          ;;(32-shell-execute "open" (get-filename)) ;;ms-office problems
-         (start-process "start" nil "explorer" (path-unix2dos (get-filename)))
-         ))
+         (let ((path (path-unix2dos (get-filename))))
+           ;;(setq path (concat "\"" path "\""))
+           (setq path (encode-coding-string path 'cp1252))
+           (start-process "start" nil "explorer" path))
+         )
+  )
  (t
   (defun path2clipboard () (interactive)
          (x-select-text (get-filename))
@@ -1035,6 +1053,15 @@
        (replace-regexp-in-string "S" "" dired-actual-switches)
      (concat dired-actual-switches "S"))))
 
+(add-hook
+ 'gdb-mode-hook
+ '(lambda ()
+    (define-key gud-minor-mode-map (kbd "<f5>") #'gud-cont)
+    (define-key gud-minor-mode-map (kbd "<f9>") #'gud-break)
+    (define-key gud-minor-mode-map (kbd "<f10>") #'gud-next)
+    (define-key gud-minor-mode-map (kbd "<f11>") #'gud-step)
+    (define-key gud-minor-mode-map (kbd "S-<f11>") #'gud-finish)))
+
 (when (require 'dired nil t)
   (define-key dired-mode-map [left] 'dired-jump)
   (define-key dired-mode-map [right] 'dired-view-file)
@@ -1067,6 +1094,12 @@
 (global-set-key [M-up] 'dired-jump)
 (global-set-key [M-right] 'bs-cycle-previous)
 (global-set-key [M-left] 'bs-cycle-next)
+
+(global-set-key (kbd "C-.") #'other-window)
+(global-set-key (kbd "C-,") #'prev-window)
+(defun prev-window ()
+  (interactive)
+  (other-window -1))
 
 (define-key isearch-mode-map [f1] 'other-window)
 (global-set-key [f1] 'other-window)
@@ -1107,6 +1140,8 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key [f9] 'open-in-eclipse)
+
+(global-set-key (kbd "M-o") 'ace-window)
 
 (when (timeclock-currently-in-p) (timeclock-out))
 (timeclock-in nil "dummy")

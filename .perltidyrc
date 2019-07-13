@@ -15,3 +15,7 @@
 --starting-indentation-level=0
 --cuddled-else
 -pt=2
+
+--add-whitespace
+#--want-left-space="="
+#--want-right-space="="

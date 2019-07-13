@@ -9,6 +9,7 @@ use File::Basename;
 use Getopt::Long qw(:config bundling);
 use IO::File;
 use YAML::XS qw(LoadFile);
+#use YAML::Syck;
 $| = 1;
 
 sub println { print "@_\n"; }
@@ -39,7 +40,7 @@ my $log = new IO::File "> $ENV{HOME}/" . basename($0) . ".log";
 die "Could not write log!\n" if !$log;
 
 my $options =
-  "--delete --prune-empty-dirs"
+  "--delete-excluded --prune-empty-dirs"
   . " --recursive --filter='dir-merge /.rsync-filter' --ignore-errors"
   . " --times --modify-window=2 --one-file-system"
   . " --itemize-changes --info= --debug=filter";
@@ -59,7 +60,7 @@ for my $s (sources()) {
     print $log $src_dst;
     my $fh = new IO::File "$cmd$filters $src \"$dst\" 2>&1 |";
     while (my $l = <$fh>) {
-      next if ignored($l,$s->{label});
+      next if ignored($l, $s->{label});
       print $log $l;
       print $l;
     }
@@ -117,7 +118,7 @@ sub src {
   my ($path) = @_;
   $path = $path->[0] if ref($path);
   my @glob = glob "'$path'";
-  return undef if ($#glob==-1);
+  return undef if ($#glob == -1);
   return "\"" . join("\" \"", @glob) . "\"";
   if ($ENV{COMPUTERNAME}) {
     return $path if ($^O =~ /cygwin/);
@@ -155,14 +156,30 @@ sub dst {
       my @list = split />/, $i;
       if ($#list > 0) {
         for my $j (@list[ 1 .. $#list ]) {
-          $filters .= " -f H_\"$list[0]/$j\"";
+          $filters .= getExclude("$list[0]/$j");
         }
       } else {
-        $filters .= " -f H_\"$i\"";
+        $filters .= getExclude($i);
       }
     }
     return $filters;
   }
+}
+
+sub getExclude {
+  my ($pattern) = @_;
+  my $modifier = substr $pattern, 0, 1;
+  my $operator = "-";
+  if ($modifier =~ /[!+]/) {
+    $pattern = substr $pattern, 1;
+    if ($modifier eq "+") {
+      $modifier = "";
+      $operator = "P";
+    }
+  } else {
+    $modifier = "";
+  }
+  return " -f ${operator}${modifier}_\"$pattern\"";
 }
 
 sub mounted {
@@ -185,11 +202,11 @@ sub mount_cifs {
 {
   my $regex;
   sub ignored {
-    my ($line,$label) = @_;
+    my ($line, $label) = @_;
     if (!$regex) {
       $regex = join "|", splitSection("ignore"), splitSection("ignore-$label");
       $regex =~ s/\*/\\*/g;
-      $regex = qr/because of pattern ($regex)/
+      $regex = qr/because of pattern ($regex)/;
     }
     return
       $line =~ /skipping non-regular file|NTUSER.DAT/i
@@ -201,7 +218,7 @@ sub mount_cifs {
 sub splitSection {
   my ($section) = @_;
   return () if (!defined $cfg->{$section});
-  
+
   $cfg->{$section} =~ s/\#.*//g;
   my @result = split /\||\s*\n\s*/, $cfg->{$section};
   return @result;

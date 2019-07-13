@@ -18,9 +18,11 @@ fi
 # if [ -d "${HOME}/bin" ] ; then
 #   PATH="${HOME}/bin:${PATH}"
 # fi
-export EDITOR=emacsclient-w32
+emacsdir=/c/Users/bernh/sw/emacs-26.2-x86_64/bin
+test -e $emacsdir || emacsdir=/cygdrive/$emacsdir
+#export EDITOR=$emacsdir/emacsclient.exe
 
 if [[ ${TERM} != 'screen' ]]; then
-  /usr/local/bin/emacs.exe &
+  $emacsdir/runemacs.exe &
 fi
 [[ ${TERM} != 'screen' && -e /bin/tmux ]] && exec tmux

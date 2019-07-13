@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!perl
 
 my $dst=shift;
 if(!$dst) { $dst="~/.bck"; }

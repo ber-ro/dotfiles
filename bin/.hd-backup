@@ -1,52 +1,66 @@
 --- # -*- mode: yaml -*-
-destination: '/cygdrive/e/rsync backup 3'
+destination: "/cygdrive/i/rsync backup 3"
 source:
-  - "/cygdrive/c/Users/rotterb":
-    - Documents/
-    #- env/
-    #- Favorites/
+#  - ["/cygdrive/f/","cryptomator"]
+  - ["/cygdrive/c/cygwin64/home/bernh/","cygwin"]
+  - ubuntu::bernhard/
+  #- /home/bernh/.bash*
+  #- ubuntu::bernhard/.X*
+  - ubuntu::etc/
+  - ubuntu::firmware/
+  - /cygdrive/c/Users/bernh:
+    - ["", "Bernhard_win"] #"/Documents"
+    - [".atom/*.{cson,coffe,less}", atom]
     - "AppData/Local/Google/Chrome/User Data/Default/Bookmarks"
-    #- AppData/Roaming/Code/User/settings.json
-    - [".atom/*.{coffee,cson,less}", atom]
-  - ["/cygdrive/c/cygwin64/home/rotterb/","rotterb-cygwin"]
+    - ["AppData/Roaming/Code/User/*.{json,coffe,less}", "code"]
+#    - .jsbeautifyrc
+#    - .kdiff3rc
+#    - [".mediathek3/*.xml", "Mediathek"]
 optional:
   bck:
-    - /home/rotterb/.bck/
-  full:
-    - ["/cygdrive/c/Users/rotterb/", rotterb-full]
-  pst:
-    - ["/cygdrive/c/Users/rotterb/Documents/Outlook-Dateien/*.pst", pst]
+    - /home/bernh/.bck/
+  .0:
+    - ubuntu::bernhard/.zala/.0/
+  steam:
+  #- "/cygdrive/c/Program Files (x86)/game/Steam/"
+  #- /cygdrive/g/SteamLibrary/steamapps/common/
+  origin:
+#  - "/cygdrive/c/Program Files (x86)/Origin Games/"
+  ubi:
+  #  - "/cygdrive/c/Program Files (x86)/game/Ubisoft Game Launcher/"
 exclude: |
-  *.au|*.ipa|*.ipsw|*.pst|*.ost
-  CachedData #*[cC]ache*.dat
-  #*[cC]ache*.db
-  *Ditto**.db|*.lock
   # *.[aA][vV][iI]|*.divx|*.m2t|*.mp?|*.wmv
   *.iso|*.vdi|*.vmdk
-  *.tmp|*.sqlite|*.db|*.xpi|*.dmp|*.dll|[lL]ogs #|*.log*
-  *[cC]ache#|*[rR]ecent*|*thumbnails
-  #.bash_history|.gvfs|gvfs-metadata|.xsession-errors|.jd|log*.txt
-  #wine-1.4|drive_c
-  mybook.log|.zala/0|kaffeine/dvb-?|linux-x86
-  Pepper Data|datareporting
+  *.tmp #|*.db#|*.sqlite|*.xpi
+  cache.* #|.fontconfig#|*[rR]ecent*|*thumbnails
+  .zala|kaffeine/dvb-?|linux-x86
+  Pepper Data|.config/google-chrome #|datareporting
+  storage
   [nN][tT][uU][sS][eE][rR].[dD][aA][tT]*
-  AppData #/LocalLow|PGP Corporation
-  AppData/Local#>atom>assembly>Apple Computer>Microsoft Help>Microsoft>Skype
+  AppData|Downloads #/LocalLow#
+  #.atom>blob-store>packages|.jenkins|.node-gyp
+  .atom #>packages>.apm #>blob-store>compile-cache
+  .jenkins|.node-gyp|.vscode/extensions #|CachedData
+  eclipse|.eclipse|.metadata|.IdeaI*|.gradle|.m2|.p2|dev #org.eclipse.oomph.*
+  Firefox|Service Worker
+  ElevatedDiagnostics|sw
+  radeon|.cpan/build
+  #[lL]ogs|+.git/**[lL]ogs
+
+  #--- ARCHIV ---
+  #AppData/Local|AppData/Roaming#>atom>assembly>Apple Computer>Microsoft Help>Microsoft>Skype
   #AppData/Local>Packages>Google/Chrome>HP/ALM-Client>Mozilla>Comms>TileDataLayer
-  AppData/Roaming>Adobe>Apple*>Juniper Networks>Foxit Software>LibreOffice
-  AppData/Roaming>Microsoft#/Document Building Blocks>Microsoft/Templates
-  AppData/Roaming>Skype>Notepad++/themes>Atom/Local*Storage
-  Downloads|Music/iTunes|Visual Studio 2013|WizKit
-  Pulse Secure/Setup Client
-  .atom|.vscode #>blob-store>packages>.node-gyp>.apm|.jenkins|.node-gyp
-  .metadata|org.eclipse.oomph.*|node_modules
-  eclipse|.eclipse|.p2 #/java-mars|.p2/pool|eclipse-installer|javascript-neon|php-mars
-  NetBeans/8.1
-  ElevatedDiagnostics|Crash Reports|Firefox #/Profiles/*/extensions
-  dev|env/emacs*|.emacs.d/elpa|Snapshots/**.sav #|.emacs.d/history|*ido*
-  tmp|Temp|trash|.bck|radeon|_vti_pvt|Fiddler2 #|desktop.ini
-  .m2/repository
+  #AppData/Roaming>Adobe>Apple*>Juniper Networks>Foxit Software>LibreOffice
+  #AppData/Roaming>Microsoft#/Document Building Blocks>Microsoft/Templates
+  #AppData/Roaming>Skype>Atom>Code#/Local*Storage#>Notepad++/themes
+  #*[cC]ache*.dat|*[cC]ache*.db|*Ditto**.db|*.lock
+  #.gvfs|gvfs-metadata#|.xsession-errors|.jd|log.txt
+  #eclipse/java-mars|eclipse-installer|javascript-neon|php-mars
 ignore: |
-  *.msp|*.o|*.elc|*.log*|*.dmp|*.info|deps|etc/charsets/*.map|node_modules
+  *.o|*.elc|*.log*|*.dmp|*.info|deps|etc/charsets/*.map|node_modules|.npm
+  .cache|Cache|cache|CachedData|GPUCache|ShaderCache
+  tmp|Temp|trash|.bck
+  Rockstar Games|Battlefield 4|PlaysTV|Raptr
+  steamapps/downloading|SaveGames
 ignore-source: |
   *.exe
