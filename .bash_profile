@@ -8,6 +8,7 @@
 # base-files version 4.2-4
 
 # ~/.bash_profile: executed by bash(1) for login shells.
+#echo .bash_profile
 
 # source the users bashrc if it exists
 if [ -f "${HOME}/.bashrc" ] ; then
@@ -15,14 +16,20 @@ if [ -f "${HOME}/.bashrc" ] ; then
 fi
 
 # Set PATH so it includes user's private bin if it exists
-# if [ -d "${HOME}/bin" ] ; then
-#   PATH="${HOME}/bin:${PATH}"
-# fi
-emacsdir=/c/Users/bernh/sw/emacs-26.2-x86_64/bin
-test -e $emacsdir || emacsdir=/cygdrive/$emacsdir
-#export EDITOR=$emacsdir/emacsclient.exe
+if [ -d "${HOME}/bin" ] ; then
+  PATH="${HOME}/bin:${PATH}"
+fi
+
+# emacsdir=/c/Users/bernh/sw/emacs-26.2-x86_64/bin
+# test -e $emacsdir || emacsdir=/cygdrive/$emacsdir
+
+if [ -n "$MSYSTEM" ]; then
+  export HISTFILE=/home/$USER/.bash_history_msys
+else
+  export EDITOR=emacsclient-w32.exe
+fi
 
 if [[ ${TERM} != 'screen' ]]; then
-  $emacsdir/runemacs.exe &
+: #  $emacsdir/runemacs.exe &
 fi
-[[ ${TERM} != 'screen' && -e /bin/tmux ]] && exec tmux
+#[[ ${TERM} != 'screen' && -e /bin/tmux ]] && exec tmux

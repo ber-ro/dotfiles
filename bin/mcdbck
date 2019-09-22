@@ -1,0 +1,302 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+use Carp;
+
+use Date::Parse;
+use Digest::MD5;
+use DirHandle;
+use File::Find;
+#use File::Path;
+use File::stat;
+#use File::Temp qw/ tempdir /;
+use POSIX qw(strftime);
+
+use Dumpvalue;
+my $dumper = new Dumpvalue;
+my $use_md5;
+my $config;
+my $incremental;
+my $max_size;
+my $prefix;
+my $rmdir;
+
+use Getopt::Long qw(:config bundling);
+die if ! GetOptions
+    "5" => \$use_md5,
+    'c=s' => \$config,
+    'i' => \$incremental,
+    'm=i' => \$max_size,
+    'p' => \$prefix,
+    'r' => \$rmdir;
+# -5 : use MD5
+# -c : configuration
+# -i : incremental
+# -m : max iso size
+# -p : prefix
+# -r : remove existing working dir
+
+$prefix ||= "mcdbck";
+die "max size missing" if (! defined $max_size);
+
+use File::Spec;
+$incremental = File::Spec->rel2abs( $incremental ) if defined $incremental;
+
+my $date = strftime( "%Y-%m-%d", localtime );
+my $workdir = "mcdbck-$date";
+if (-d $workdir) {
+  die "A working dir already exists. Use option -r to remove.\n" if (! $rmdir);
+  for (`mount`) {
+    system "umount $1" if /(.*$workdir.*) on (.*) type/;
+  }
+  system "rm -rf $workdir";
+}
+mkdir $workdir;
+chdir $workdir;
+
+my $stderr = *STDERR{IO};
+my $ign = myopen( my $ignfile = "> mcdbck-ign.log" );
+my $log = myopen( my $logfile = "> mcdbck-log.log" );
+my $trc = myopen( my $trcfile = "> mcdbck-trc.log" );
+my $n = 0;
+my $size = 0;
+#$incremental = (stat $incremental)->mtime if (defined $incremental);
+
+my $exclude;
+###########################################################################
+readDotfile();
+readBackupContent() if $incremental;
+fprintln(
+    $log, "#-*- generic-ignore-files-regexp: \"\";",
+    " mode: font-lock;",
+    " font-lock-string-face: nil;",
+    " font-lock-comment-face: nil;",
+    " font-lock-keywords-case-fold-search: t;",
+    " font-lock-keywords: ",
+    keywords( $exclude ),
+    " -*-" );
+mkList();
+mkImage();
+###########################################################################
+exit;
+
+sub println { print @_, "\n"; }
+
+sub fprintln {
+  my $fh = shift;
+  print $fh @_, "\n";
+}
+
+sub psystem {
+  println @_;
+  return system @_;
+}
+
+sub myopen {
+  my ($f,$noerror) = @_;
+  my $method = ($noerror ? \&cluck : \&confess);
+  open my $fh, $f or &$method( "Cannot open '@_': $!" );
+#  cluck "Cannot open '@_': $!";
+  return $fh;
+}
+
+sub IsDirEmpty {
+  my $d = shift;
+  my $dh = new DirHandle $d;
+  println "no handle: $d" and return 0 if ! defined $dh;
+  my @d = $dh->read;
+  return scalar @d <= 2;
+}
+
+my $dev;
+my %dir;
+my $dir;
+my @dir;
+my $excludeSilent;
+my %size;
+sub readDotfile
+{
+  my @exclude;
+  my @excludeSilent;
+  @ARGV = "$ENV{HOME}/.mcdbck";
+  while (<>) {
+    s(\#.*)();
+    if (/((.*):)?([^=]+)=(.*)/) {
+#      println "$config,$1,$2,$3,$4";
+      next if ($config && $config ne $2);
+      my $iso = $3;
+      my $fs = $4;
+      push @dir, $fs;
+      $fs =~ s((.*/).*)($1) if ($iso =~ m( /$ )x);
+      $dir{$fs} = $iso;
+    } elsif (/^dev:(.*)/) {
+      $dev=$1;
+    } elsif (/--(.*)/) {
+      push @excludeSilent, $1;
+    } elsif (/-(.*)/) {
+      push @exclude, $1;
+    } elsif (! /^\s*$/) {
+      fprintln $stderr, "Unrecognized line in INI-file: $_";
+    }
+  }
+#  exit;
+  $exclude = join '|', @exclude;
+  $excludeSilent = join '|', @excludeSilent;
+#  $dumper->dumpValue( \%dir );
+#  $dumper->dumpValue( $exclude );
+}
+
+my %time;
+sub readBackupContent
+{
+  @ARGV = $incremental;
+  while (<>) {
+    my $time = str2time( substr $_, 0, 24 );
+#    println $time;
+    my $f = substr $_, 25;
+    chomp $f;
+    $time{$f} = $time;
+  }
+#  $dumper->dumpValue( \%time );
+}
+
+sub ignore {
+  my ($f,$reason) = @_;
+  print $ign `ls -ld \"$f\"`;
+  fprintln $log, "$f ($reason)";
+}
+
+my $list;
+sub isoAddSize
+{
+  my $add = shift;
+  #println $add;
+  if (($size + $add) > $max_size *1024 *1024 *0.97) {
+    println "new ISO";
+    close $list;
+    $n++;
+    $list = myopen "> $prefix$n.lst";
+    $size = 0;
+  }
+  $size += $add;
+}
+
+my $md5;
+sub wanted
+{
+#  fprintln $trc, "$_";
+  my $fs = $_;
+#  println $time{$fs} if defined $time{$fs};
+#  println( (stat $fs)->mtime, " ($fs)" ) if (! -l $fs);
+  return if
+    (defined $time{$fs} &&
+     (-l $fs ? (lstat $fs)->mtime : (stat $fs)->mtime) <= $time{$fs});
+#  println "$dir = $dir{$dir}";
+  s($dir)($dir{$dir});
+#  fprintln $trc, "link: $fs" if -l $fs;
+  if ( -f $fs || -l $fs# || IsDirEmpty $fs
+       )
+  {
+    return if (-l $fs || -d $fs);
+    isoAddSize( ((stat $fs)->size/2048 +1) * 2048);
+
+    my $fs2; ($fs2 = $fs) =~ s(=)(\\=)g;
+    my $iso; ($iso = $_) =~ s(=)(\\=)g;
+    fprintln $list, "$iso=$fs2";;
+
+    if ($use_md5) {
+      my $fh = myopen $fs, "noerror";
+      binmode $fh;
+      print $md5 Digest::MD5->new->addfile($fh)->hexdigest, " $fs\n";
+    } else {
+      fprintln $md5, scalar localtime ((stat $fs)->mtime), " $fs";
+    }
+  } else {
+#   fprintln $list, "$_=$fs";
+#    ignore $fs, "not empty dir";
+  }
+}
+
+sub filterExcludes
+{
+#  fprintln $trc, "filter1: @_";
+  isoAddSize 2048;
+  my @result;
+  for (sort @_)
+  {
+    my $f = $_;
+    local $_ = $File::Find::dir ."/". $_;
+#    println( (stat $_)->size, " ", $_ ) if -d;
+    if ( /(\~|\#|\.bak)$/ ||
+         defined ($excludeSilent) && /$excludeSilent/io ) {
+#      next;
+    } elsif (! -l && ! -r) {
+      ignore $_, "not readable";
+    } elsif (defined ($exclude) && /$exclude/io || /\/$workdir$/) {
+      ignore $_, "by pattern";
+    }
+    else {
+      push @result, $f;
+    }
+  }
+#  fprintln $trc, "filter2: @result";
+  return @result;
+}
+
+sub mkList
+{
+#  return if (-e "$prefix$n.lst");
+  $list = myopen "> $prefix$n.lst";
+  $md5 = myopen "> $prefix.md5";
+  for (@dir) {
+    die "Path $_ does not exist!" if (! -e (glob $_)[0]);
+  }
+  for my $d (@dir) {
+    $dir = $d;
+    $dir =~ s((.*/).*)($1) if (! $dir{$dir});
+    finddepth
+      ({ wanted => \&wanted,
+         no_chdir => 1,
+         preprocess => \&filterExcludes }, glob $d );
+  }
+  close $list;
+  close $md5;
+}
+
+sub mkImage
+{
+  for my $i (0 .. $n) {
+    my $msinfo=`cdrecord dev=$dev -msinfo`;
+    chomp $msinfo;
+    if ($msinfo) {$msinfo="-C $msinfo -M $dev"}
+    psystem "mkisofs -graft-points"
+        ." -v -l -J -joliet-long -R -hide-joliet-trans-tbl -iso-level 4"
+        ." $msinfo"
+        ." -V \"CD backup, ". $date . "\""
+        ." -o $prefix$i.img"
+        ." -path-list $prefix$i.lst";
+    mkdir "$prefix$i";
+    #psystem "chown brotter. $prefix$i* mcdbck-*.log mcdbck.md5";
+    #psystem "mount -o loop,ro $prefix$i.img $prefix$i";
+    #psystem "mount -o loop,ro $prefix$i.img $prefix$i";
+    #psystem "kdirstat $prefix$i&";
+    println "Push <ENTER> to burn!";
+    readline;
+    psystem "cdrecord -v -tao -data dev=$dev -driveropts=burnproof -multi $prefix$i.img";
+  }
+  #psystem "cdrecord -scanbus";
+}
+
+sub keywords
+{
+  my $keywords;
+  for (@_) {
+    $keywords .= "\"". join("\" \"", split /\|/) ."\" ";
+  }
+#  $keywords .= "\"(". join("|", @_) .")\"";
+  $keywords =~ s(\$)(\\>)g;
+  $keywords =~ s(([\(\)]))(\\$1)g;
+  $keywords =~ s(\\)(\\\\)g;
+  return "($keywords)";
+}

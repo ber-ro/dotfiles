@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use utf8;
 
 use Carp;
 use Data::Dumper;
@@ -58,7 +59,9 @@ for my $s (sources()) {
     my $filters = $src =~ /\/"?$/ ? filters($s->{label}) : "";
     print $src_dst;
     print $log $src_dst;
-    my $fh = new IO::File "$cmd$filters $src \"$dst\" 2>&1 |";
+    my $raw = "$cmd$filters $src \"$dst\"";
+    #println $raw;
+    my $fh = new IO::File "$raw 2>&1 |";
     while (my $l = <$fh>) {
       next if ignored($l, $s->{label});
       print $log $l;

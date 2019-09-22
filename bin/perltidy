@@ -1,0 +1,1 @@
+perl.exe -I /usr/local/share/perl5/site_perl/5.26 /usr/local/bin/perltidy $*

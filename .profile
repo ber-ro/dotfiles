@@ -8,6 +8,7 @@
 # base-files version 4.2-4
 
 # ~/.profile: executed by the command interpreter for login shells.
+echo .profile
 
 # The latest version as installed by the Cygwin Setup program can
 # always be found at /etc/defaults/etc/skel/.profile
@@ -24,7 +25,7 @@
 # User dependent .profile file
 
 # Set user-defined locale
-export LANG=$(locale -uU)
+#export LANG=$(locale -uU)
 
 #export http_proxy="http://127.0.0.1:3128"
 #export https_proxy="http://127.0.0.1:3128"

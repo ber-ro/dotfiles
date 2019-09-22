@@ -8,6 +8,7 @@
 # base-files version 4.2-4
 
 # ~/.bashrc: executed by bash(1) for interactive shells.
+#echo .bashrc
 
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
@@ -30,10 +31,16 @@ HISTFILESIZE=2000
 TEMP=$TMP
 #export NODE_PATH=D:\\Benutzer-Profile\\rotterb\\AppData\\Roaming\\npm\\node_modules
 PERLLIB=$PERLLIB:~/bin
-LANG=C # ediff
-export DICPATH=/cygdrive/c/Programme/office/libreoffice/share/extensions/dict-de
-export DICTIONARY=de_DE_frami,en_US,en_geo,en_GB,en_med
+LANG=C.UTF-8 # ediff
+#LANG=de_DE,en_US,en_GB #_frami #de_DE
+export DICTIONARY=de_DE_frami,en_US,en_GB
 export DISPLAY=:0.0
+
+if [ -n "$MSYSTEM" ]; then
+  export DICPATH=c:/Programme/LibreOffice/share/extensions/dict-de
+else
+  export DICPATH=/cygdrive/c/Programme/LibreOffice/share/extensions/dict-de
+fi
 
 if [[ $INSIDE_EMACS ]]; then
   export PS1="\\w\\$ "

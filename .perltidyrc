@@ -1,3 +1,5 @@
+--standard-output
+
 --indent-columns=2
 
 --freeze-newlines
@@ -14,7 +16,7 @@
 --stack-closing-tokens
 --starting-indentation-level=0
 --cuddled-else
--pt=2
+--paren-tightness=2
 
 --add-whitespace
 #--want-left-space="="

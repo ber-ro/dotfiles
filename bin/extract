@@ -1,0 +1,131 @@
+#!/usr/bin/perl
+
+use Carp;
+use strict;
+use warnings;
+
+use Cwd;
+use File::Basename;
+use File::Find;
+use File::Glob 'bsd_glob';
+use File::Spec;
+use Getopt::Long;
+
+sub println;
+sub psystem;
+
+Getopt::Long::Configure ("bundling");
+my $bList;
+my $bShred;
+my $sPassword;
+exit if (! GetOptions "l" => \$bList, "s" => \$bShred, "p=s" => \$sPassword );
+
+my $bExtracted;
+for (;;) {
+  $bExtracted = 0;
+  for my $i (@ARGV) {
+    find({wanted => \&wanted, no_chdir => 1}, $i) if -e $i;
+  }
+  last if ! $bExtracted || $bList;
+}
+exit;
+########################################
+
+sub println { print @_, "\n"; }
+sub psystem {
+  my ($cmd, %opts) = @_;
+  my $cwd = cwd;
+  if ($opts{cwd}) {
+    mkdir $opts{cwd};
+    chdir $opts{cwd};
+  }
+  println "> $cmd";
+  my $result = system $cmd;
+  chdir $cwd if $opts{cwd};
+  return $result;
+}
+
+sub pqx {
+  my ($cmd) = @_;
+  println "> $cmd";
+  my @result = `$cmd`;
+  println @result;
+  return @result;
+}
+
+sub destination {
+  my ($path) = @_;
+  my $format = "$path-%d";
+  for (my $i = 1; -d $path; $i++) {
+    $path = sprintf $format, $i;
+  }
+  return $path;
+}
+
+sub unrar_pwd {
+  return $sPassword ? " -p$sPassword" : " -p-";
+}
+
+sub num_files
+{
+  my ($path) = @_;
+
+  if ($path =~ /\.rar$/i) {
+    return scalar(() = pqx("unrar lb".unrar_pwd()." \"$path\""));
+  } elsif ($path =~ /\.zip$/i) {
+    my $n=0;
+    for my $i (pqx("unzip -lqq \"$path\"")) {
+      $n++ if $i !~ m%/$%;
+    }
+    return $n;
+  }
+
+  return undef;
+}
+
+sub extract
+{
+  my ($path) = @_;
+  return 1 if ! -f $path;
+
+  my ($name,$dir,$suffix) = fileparse($path, qw/\.rar \.zip \.ZIP/);
+  my $dest = $dir.$name;
+  my $num_files = num_files $path;
+
+  if ($path =~ /\.rar$/i) {
+    return $bList
+    ? psystem("unrar lb".unrar_pwd()." \"$path\"")
+    : psystem("unrar x".unrar_pwd()." \"$path\"", $num_files > 1 ? (cwd => $dest) : ());
+  } elsif ($path =~ /\.zip$/i) {
+    return $bList
+    ? psystem("unzip -l \"$path\"")
+    : psystem("unzip \"$path\" -d \"".destination($dest)."\"");
+  }
+
+  return 1;
+}
+
+sub rm {
+  my ($path) = @_;
+  return if $bList;
+
+  my @files = (-e $path ? $path : bsd_glob $path);
+  for my $i (@files) {
+    if ($bShred) {
+      psystem "shred -un1 \"$i\"";
+    } else {
+      println "Removing $i";
+      unlink $i;
+    }
+  }
+}
+
+sub wanted {
+  return if extract(File::Spec->rel2abs($_)) != 0;
+  if ($_ =~ /(.*\.part)\d\.rar$/i) {
+    rm "$1?.rar";
+  } else {
+    rm $_;
+  }
+  $bExtracted = 1;
+}

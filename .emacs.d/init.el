@@ -6,12 +6,14 @@
                    (replace-regexp-in-string
                     "\\\\" "\\\\\\\\"
                     (replace-regexp-in-string "\"" "" path)) "\"")) 0 -1))
-        ((equal system-type 'windows-nt)
-         (setq recentf-save-file "~/.emacs.d/recentf.win")
-         (set-default 'savehist-file "~/.emacs.d/history.win"))
         (t (replace-regexp-in-string "\\\\" "/" path))))
+
 (add-to-list 'load-path (concat (path-dos2unix (or (getenv "ENVDIR")
                                                    (getenv "HOME"))) "/elisp"))
+(when (equal system-type 'windows-nt)
+  (setq server-name "windows-nt")
+  (setq recentf-save-file "~/.emacs.d/recentf.win")
+  (set-default 'savehist-file "~/.emacs.d/history.win"))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -22,6 +24,9 @@
  '(completions-common-part ((t (:foreground "gray50"))))
  '(completions-first-difference ((t nil)))
  '(diff-context-face ((((class color) (background light)) (:foreground "medium blue"))) t)
+ '(diff-dired-different ((t (:inherit default :background "salmon"))))
+ '(diff-dired-equal ((t (:inherit default :background "pale green"))))
+ '(diff-dired-orphan ((t (:inherit default :background "white smoke"))))
  '(highlight ((((class color) (background light)) (:background "lavender"))))
  '(mode-line ((nil (:background "LightSteelBlue2" :box (:line-width -1 :style released-button)))))
  '(outline-2 ((t (:foreground "orange red"))))
@@ -36,15 +41,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(TeX-save-query nil)
  '(TeX-view-program-list (quote (("Okular" "okular %o"))))
- '(TeX-view-program-selection
-   (quote
-    (((output-dvi style-pstricks)
-      "dvips and gv")
-     (output-dvi "Okular")
-     (output-dvi "xdvi")
-     (output-pdf "Evince")
-     (output-html "xdg-open"))))
  '(ac-auto-show-menu t)
  '(ac-candidate-menu-min 2)
  '(ac-use-comphist nil)
@@ -182,7 +180,6 @@
  '(fill-column 80)
  '(find-file-visit-truename nil)
  '(find-grep-options "-iq")
- '(find-ls-option (quote ("-exec ls -dagGlh {} +" . "-dagGlh")))
  '(focus-follows-mouse nil)
  '(font-lock-global-modes t)
  '(font-lock-maximum-size 256000)
@@ -219,6 +216,8 @@
  '(indent-tabs-mode nil)
  '(indicate-buffer-boundaries (quote left))
  '(inhibit-startup-screen t)
+ '(ispell-dictionary "de_DE_frami,en_US")
+ '(ispell-personal-dictionary "~/.hunspell_default")
  '(ispell-program-name "hunspell")
  '(js-auto-indent-flag t)
  '(js-indent-level 2)
@@ -266,7 +265,7 @@
      (ztree t))))
  '(package-selected-packages
    (quote
-    (ace-window ac-js2 auto-complete csharp-mode electric-spacing feature-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
+    (auctex ace-window ac-js2 auto-complete csharp-mode electric-spacing feature-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
  '(parens-require-spaces nil)
  '(perl-indent-continued-arguments 2)
  '(perl-indent-level 2)
@@ -325,7 +324,7 @@
     (speedbar-sort-tag-hierarchy speedbar-trim-words-tag-hierarchy)))
  '(speedbar-use-images nil)
  '(split-width-threshold nil)
- '(tab-width 2)
+ '(tab-width 8)
  '(tcl-indent-level 2)
  '(tempo-insert-region t)
  '(timeclock-ask-before-exiting nil)
@@ -522,18 +521,18 @@
 (put 'scroll-left 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
-(let* ((cygwin-root "c:/cygwin64")
-       (cygwin-bin (concat cygwin-root "/bin")))
-  (when (and (eq 'windows-nt system-type)
-             (file-readable-p cygwin-root))
+;; (let* ((cygwin-root "c:/cygwin64")
+;;        (cygwin-bin (concat cygwin-root "/bin")))
+;;   (when (and (eq 'windows-nt system-type)
+;;              (file-readable-p cygwin-root))
 
-    (setq exec-path (cons cygwin-bin exec-path))
-    ;;(setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
+;;     (setq exec-path (cons cygwin-bin exec-path))
+;;     ;;(setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
 
-    ;; NT-emacs assumes a Windows shell. Change to bash.
-    (setq shell-file-name "bash")
-    (setenv "SHELL" shell-file-name) 
-    (setq explicit-shell-file-name shell-file-name)))
+;;     ;; NT-emacs assumes a Windows shell. Change to bash.
+;;     (setq shell-file-name "bash")
+;;     (setenv "SHELL" shell-file-name) 
+;;     (setq explicit-shell-file-name shell-file-name)))
 
 (cond
  ((or (equal system-type 'windows-nt)
@@ -569,6 +568,7 @@
          (let ((path (path-unix2dos (get-filename))))
            ;;(setq path (concat "\"" path "\""))
            (setq path (encode-coding-string path 'cp1252))
+           (message path)
            (start-process "start" nil "explorer" path))
          )
   )
@@ -714,10 +714,17 @@
   (if (not (member my-latex-bibtex TeX-command-list))
       (setq TeX-command-list (cons my-latex-bibtex TeX-command-list))))
 (add-hook 'LaTeX-mode-hook 'latex-init)
+(defun my-TeX-master ()
+  (interactive)
+  (save-buffer)
+  (TeX-command "LaTeX" 'TeX-master-file))
 
-;;(setq ispell-dictionary "deutsch")
-;;(setq ispell-alternate-dictionary "/home/rotter/.ispell_deutsch")
-;;(setq ispell-check-comments nil)
+;;(setenv "LANG" "de_DE_frami,en_US")
+(with-eval-after-load "ispell"
+  ;; ispell-set-spellchecker-params has to be called
+  ;; before ispell-hunspell-add-multi-dic will work
+  (ispell-set-spellchecker-params)
+  (ispell-hunspell-add-multi-dic "de_DE_frami,en_US"))
 
 (setq european-calendar-style t
       calendar-latitude 48.1
@@ -921,6 +928,18 @@
       dired-directory
     (buffer-file-name)))
 
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if filename
+        (if (y-or-n-p (concat "Do you really want to delete file " filename " ?"))
+            (progn
+              (delete-file filename)
+              (message "Deleted file %s." filename)
+              (kill-buffer)))
+      (message "Not a file visiting buffer!"))))
+
 (defun pop-to-buffer-point-min (process event)
   (save-selected-window
     (pop-to-buffer (process-buffer process))
@@ -1072,6 +1091,13 @@
  '(lambda ()
     (define-key archive-mode-map [left] 'dired-jump)
     (define-key archive-mode-map [right] 'archive-view)))
+
+(add-hook
+ 'tar-mode-hook
+ '(lambda ()
+    (define-key tar-mode-map [left] 'dired-jump)
+    (define-key tar-mode-map [right] 'tar-view)))
+
 (add-hook
  'view-mode-hook
  '(lambda ()
@@ -1086,6 +1112,13 @@
     (define-key image-mode-map "n" [left ?n ?f])
     (define-key image-mode-map "p" [left ?p ?f])
     (define-key image-mode-map "d" [left ?d ?f])))
+
+(add-hook
+ 'view-mode-hook
+ '(lambda()
+    (define-key view-mode-map "n" [?q ?n ?v])
+    (define-key view-mode-map "p" [?q ?p ?v])
+    (define-key view-mode-map "d" [?q ?d ?v])))
 
 ;;(global-set-key "\C-x\C-c" 'expunge-and-exit)
 
@@ -1123,6 +1156,8 @@
 (global-set-key [f8] '(lambda () (interactive) (find-tag t t)))
 (global-set-key [C-f8] 'imenu)
 (global-set-key [S-f8] 'which-function-mode)
+(global-set-key [f9] 'my-TeX-master)
+;;(global-set-key [f9] 'open-in-eclipse)
 (global-set-key [f11] 'dabbrev-expand)
 (global-set-key [f12] 'save-buffer)
 (global-set-key [C-f12] 'save-some-buffers)
@@ -1139,7 +1174,6 @@
 (global-set-key "\M-Y" 'yank-pop-backwards)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key (kbd "C-x g") 'magit-status)
-(global-set-key [f9] 'open-in-eclipse)
 
 (global-set-key (kbd "M-o") 'ace-window)
 

@@ -1,5 +1,5 @@
 --- # -*- mode: yaml -*-
-destination: "/cygdrive/i/rsync backup 3"
+destination: "/cygdrive/u/rsync backup 3"
 source:
 #  - ["/cygdrive/f/","cryptomator"]
   - ["/cygdrive/c/cygwin64/home/bernh/","cygwin"]
@@ -30,21 +30,22 @@ optional:
   #  - "/cygdrive/c/Program Files (x86)/game/Ubisoft Game Launcher/"
 exclude: |
   # *.[aA][vV][iI]|*.divx|*.m2t|*.mp?|*.wmv
-  *.iso|*.vdi|*.vmdk
+  *.iso|*.img|*.vdi|*.vmdk
   *.tmp #|*.db#|*.sqlite|*.xpi
   cache.* #|.fontconfig#|*[rR]ecent*|*thumbnails
   .zala|kaffeine/dvb-?|linux-x86
   Pepper Data|.config/google-chrome #|datareporting
-  storage
+  storage|elpa
   [nN][tT][uU][sS][eE][rR].[dD][aA][tT]*
   AppData|Downloads #/LocalLow#
   #.atom>blob-store>packages|.jenkins|.node-gyp
   .atom #>packages>.apm #>blob-store>compile-cache
   .jenkins|.node-gyp|.vscode/extensions #|CachedData
-  eclipse|.eclipse|.metadata|.IdeaI*|.gradle|.m2|.p2|dev #org.eclipse.oomph.*
+  eclipse|.eclipse|.metadata|.IdeaI*|.gradle|dev #org.eclipse.oomph.*
   Firefox|Service Worker
   ElevatedDiagnostics|sw
   radeon|.cpan/build
+  Koofr
   #[lL]ogs|+.git/**[lL]ogs
 
   #--- ARCHIV ---
@@ -59,6 +60,7 @@ exclude: |
 ignore: |
   *.o|*.elc|*.log*|*.dmp|*.info|deps|etc/charsets/*.map|node_modules|.npm
   .cache|Cache|cache|CachedData|GPUCache|ShaderCache
+  .m2|.p2
   tmp|Temp|trash|.bck
   Rockstar Games|Battlefield 4|PlaysTV|Raptr
   steamapps/downloading|SaveGames
