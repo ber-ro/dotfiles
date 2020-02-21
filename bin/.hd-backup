@@ -29,7 +29,7 @@ optional:
   ubi:
   #  - "/cygdrive/c/Program Files (x86)/game/Ubisoft Game Launcher/"
 exclude: |
-  # *.[aA][vV][iI]|*.divx|*.m2t|*.mp?|*.wmv
+  *.[aA][vV][iI]|*.divx|*.m2t|*.mp?|*.wmv
   *.iso|*.img|*.vdi|*.vmdk
   *.tmp #|*.db#|*.sqlite|*.xpi
   cache.* #|.fontconfig#|*[rR]ecent*|*thumbnails

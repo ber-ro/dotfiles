@@ -48,6 +48,7 @@
  '(ac-use-comphist nil)
  '(archive-zip-use-pkzip nil)
  '(async-shell-command-buffer (quote new-buffer))
+ '(auto-save-interval 50)
  '(backup-by-copying t)
  '(backup-directory-alist (quote (("." . "~/.bck"))))
  '(bs-attributes-list
@@ -193,6 +194,7 @@
  '(global-font-lock-mode t nil (font-lock))
  '(global-hl-line-mode t nil (hl-line))
  '(global-mark-ring-max 1024)
+ '(global-visual-line-mode t)
  '(gnus-summary-line-format "%U%R%d%(%[%4L: %-20,20n%]%) %s")
  '(gud-chdir-before-run nil)
  '(hi-lock-auto-select-face nil)
@@ -216,7 +218,7 @@
  '(indent-tabs-mode nil)
  '(indicate-buffer-boundaries (quote left))
  '(inhibit-startup-screen t)
- '(ispell-dictionary "de_DE_frami,en_US")
+ '(ispell-dictionary "de_DE_frami")
  '(ispell-personal-dictionary "~/.hunspell_default")
  '(ispell-program-name "hunspell")
  '(js-auto-indent-flag t)
@@ -266,6 +268,7 @@
  '(package-selected-packages
    (quote
     (auctex ace-window ac-js2 auto-complete csharp-mode electric-spacing feature-mode highlight-thing hl-anything js2-mode markdown-mode mvn powershell pug-mode refine typescript-mode web-mode yaml-mode yasnippet ztree)))
+ '(page-delimiter "^[ \\n\\r\\t]*$")
  '(parens-require-spaces nil)
  '(perl-indent-continued-arguments 2)
  '(perl-indent-level 2)
@@ -279,7 +282,7 @@
  '(ps-left-margin 16)
  '(ps-n-up-border-p nil)
  '(ps-n-up-margin 16)
- '(ps-n-up-printing 2)
+ '(ps-number-of-columns 1)
  '(ps-paper-type (quote a4))
  '(ps-print-header-frame t)
  '(ps-print-only-one-header t)
@@ -341,6 +344,7 @@
  '(vc-make-backup-files t)
  '(version-control t)
  '(visible-bell t)
+ '(visual-line-fringe-indicators (quote (left-curly-arrow right-curly-arrow)))
  '(w3m-local-find-file-function nil)
  '(w3m-local-find-file-regexps (quote (nil)))
  '(warning-suppress-types (quote ((undo discard-info))))
@@ -397,7 +401,7 @@
    ((font-info "Noto Mono")
     (modify-all-frames-parameters '((font . "Noto Mono-8")))))
   (modify-all-frames-parameters
-   (list (cons 'height (/ (- (nth 4 (assq 'workarea (car (display-monitor-attributes-list)))) 50) (frame-char-height))))))
+   (list (cons 'height (/ (- (nth 4 (assq 'workarea (car (display-monitor-attributes-list)))) 55) (frame-char-height))))))
 
 (when (string= user-real-login-name "root")
   (setq frame-title-format "emacs - root")
@@ -549,7 +553,6 @@
   ;; (setq find-dired-find-program "unixfind")
   ;; (setq find-program "unixfind")
   (setq ps-printer-name t)
-  (setq ps-lpr-command "c:\\Programme\\ut\\Ghostview\\gsview\\gsview32.exe")
   ;;(when (require 'gnuserv nil t) (gnuserv-start))
   (defun path-unix2dos (path)
     (cond ((equal system-type 'cygwin)
@@ -567,9 +570,14 @@
          ;;(32-shell-execute "open" (get-filename)) ;;ms-office problems
          (let ((path (path-unix2dos (get-filename))))
            ;;(setq path (concat "\"" path "\""))
-           (setq path (encode-coding-string path 'cp1252))
            (message path)
-           (start-process "start" nil "explorer" path))
+           ;;(setq path (encode-coding-string path 'windows-1252))
+           ;;(setq path "C:\\Users\\bernh\\Documents\\my\\job\\suche\\Right Management\\webinar\\2019_Selbstmarketing_Teil_II_Hüpgens.pdf")
+           (message path)
+           (start-process "start" nil "explorer" path)
+           ;;(start-process "cmd" nil "cmd" "/c" "explorer" path)
+           ;;(print path)
+           )
          )
   )
  (t
@@ -627,9 +635,9 @@
   ;;   (filladapt-mode 1)
   ;;   (cond ((not (string-match "IDL" mode-name))
   ;;          (imenu-add-menubar-index)))
-  (setq paragraph-start "\f\\|[ \t]*$")
-  (setq paragraph-separate "[ \t\f]*$")
   )
+;; (setq paragraph-start "\f\\|[ \t]*$")
+;; (setq paragraph-separate "[ \t\f]*$")
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 ;; (add-hook 'java-mode-hook
@@ -858,6 +866,7 @@
 (add-to-list 'auto-mode-alist '("\\.orig" true t))
 ;;(add-to-list 'auto-mode-alist '("\\.ps1" . powershell-mode))
 (add-to-list 'auto-mode-alist '("\\.vcproj$" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.lco$" . latex-mode))
 (add-to-list 'auto-mode-alist
              '("\\.\\(frm\\|bas\\|cls\\|vbs?\\)$" . visual-basic-mode))
 (setq visual-basic-keywords-to-highlight t)
@@ -1072,6 +1081,16 @@
        (replace-regexp-in-string "S" "" dired-actual-switches)
      (concat dired-actual-switches "S"))))
 
+(defun my-ps-preview (arg)
+  (interactive "P")
+  (let ((tmp (make-temp-file "ps-temp" nil ".ps"))
+        (viewer "/cygdrive/c/Program Files/media/SumatraPDF/SumatraPDF.exe")
+        (func (if arg (read-command "Function: ") 'ps-print-buffer)))
+    (cond ((equal func 'ps-print-region)
+           (funcall func (point-marker) (mark-marker) tmp))
+          (t (funcall func tmp)))
+    (call-process viewer nil 0 nil (path-unix2dos tmp))))
+
 (add-hook
  'gdb-mode-hook
  '(lambda ()
@@ -1127,6 +1146,9 @@
 (global-set-key [M-up] 'dired-jump)
 (global-set-key [M-right] 'bs-cycle-previous)
 (global-set-key [M-left] 'bs-cycle-next)
+
+(global-set-key [C-up] 'backward-page)
+(global-set-key [C-down] 'forward-page)
 
 (global-set-key (kbd "C-.") #'other-window)
 (global-set-key (kbd "C-,") #'prev-window)

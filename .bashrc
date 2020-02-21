@@ -37,9 +37,9 @@ export DICTIONARY=de_DE_frami,en_US,en_GB
 export DISPLAY=:0.0
 
 if [ -n "$MSYSTEM" ]; then
-  export DICPATH=c:/Programme/LibreOffice/share/extensions/dict-de
+  export DICPATH=c:/Programme/office/LibreOffice/share/extensions/dict-de
 else
-  export DICPATH=/cygdrive/c/Programme/LibreOffice/share/extensions/dict-de
+  export DICPATH=/cygdrive/c/Programme/office/LibreOffice/share/extensions/dict-de
 fi
 
 if [[ $INSIDE_EMACS ]]; then
@@ -64,4 +64,5 @@ alias la='ls -A'
 alias l='ls -CF'
 
 alias h=history
+alias g=git
 alias dgit='git --git-dir ~/.dotfiles/.git --work-tree=$HOME'

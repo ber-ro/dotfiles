@@ -11,9 +11,11 @@ if %my_unix%==msys64 ( set "PATH=C:\msys64\usr\bin;%PATH%" )
 if %my_unix%==mingw64 (
   ::set "PATH=%PATH%;C:\msys64\usr\bin;c:\msys64\mingw64\bin"
   set "PATH=c:\msys64\mingw64\bin;C:\msys64\usr\bin;C:\msys64\bin;%PATH%"
-  set DICPATH=c:/Program Files/LibreOffice/share/extensions/dict-de
+  set "DICPATH=c:/Program Files/LibreOffice/share/extensions/dict-de"
 )
 set PATH=c:\Program Files\ut\7-Zip;%PATH%
+set JAVA_HOME=c:\Users\bernh\Documents\sw\jre8
+set PATH=c:\Users\bernh\Documents\sw\jre8\bin;%PATH%
 set EDITOR=emacsclientw.exe -f ~/.emacs.d/server/windows-nt
 %MYEMACSDIR%\bin\runemacs.exe
 ::c:/msys64/usr/bin/emacs.exe

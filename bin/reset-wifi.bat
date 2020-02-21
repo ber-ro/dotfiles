@@ -29,21 +29,26 @@ sub psystem {
 }
 
 sub main {
-  sleep 10 if !$debug;
+  sleep 20 if !$debug;
+  snoretoast("starting");
   check();
 }
 
-sub reconnect {
-  psystem "netsh wlan disconnect";
-  snoretoast("Disconnect.");
-  mysleep(5);
-  psystem "netsh wlan connect name=Watzmann";
-  snoretoast("Connect.");
-  $sleep = 20;
+BEGIN {
+  my $counter = 0;
+  sub reconnect {
+    ++$counter;
+    psystem "netsh wlan disconnect";
+    snoretoast("Disconnect. ($counter)");
+    mysleep(5);
+    psystem "netsh wlan connect name=Watzmann";
+    snoretoast("Connect. ($counter)");
+    $sleep = 10;
+  }
 }
 
 sub check {
-  for (my $t0 = time ; time < $t0 + 5 * 60 ;) {
+  for (my $t0 = time ; time < $t0 + 2 * 60 ;) {
     println "checking...";
     mysleep();
     my $ping = qx(ping 8.8.8.8 -n 1);
@@ -60,7 +65,10 @@ sub check {
 sub snoretoast {
   my ($msg) = @_;
   my ($volume, $directories, $file) = File::Spec->splitpath($0);
-  my $exe = File::Spec->catpath($volume, $directories, "snoretoast.exe");
+  my $id = "reset-wifi";
+  my $exe = File::Spec->catpath($volume, $directories, "snoretoast.exe")
+      . " -id $id";
+  psystem $exe . " -close";
   psystem $exe . " -t \"reset-wifi\" -m \"$msg\"";
 }
 
