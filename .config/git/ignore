@@ -1,6 +1,8 @@
 *.diff
 *.bak
 *.orig
+*.aux
+*.log
 
 # Eclipse
 *.jpage
